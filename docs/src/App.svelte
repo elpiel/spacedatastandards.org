@@ -136,7 +136,6 @@
     window.addEventListener("keydown", sEvent);
     if (!$IDLEditorContents) {
       let loaded = await loadFile($manifest.files[0].filename, $manifest, true);
-      console.log(loaded);
     }
   });
   onDestroy(() => {
