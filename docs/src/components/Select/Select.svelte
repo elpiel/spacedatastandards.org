@@ -135,7 +135,7 @@
           class="text"
           on:click={e => {
             loaded = false;
-            loadFile(mfile.filename, $manifest);
+            loadFile(mfile.filename, $manifest, true);
             window.location.hash = '/idl';
             toggleMenu(false);
           }}>
