@@ -20,9 +20,6 @@
   };
   onMount(() => {
     loaded = true;
-    if (!$IDLDocument) {
-      loadFile($manifest.files[0].filename);
-    }
   });
 </script>
 

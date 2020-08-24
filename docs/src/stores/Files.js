@@ -20,7 +20,7 @@ export let TestEditorDocument = writable("Test.js");
 export let TestEditorContents = writable(_TestEditorContents);
 export let saveEventTime = writable(new Date());
 export let loadFile = async (mFile, _manifest, skipPrompt) => {
-  if (!skipPrompt && confirm("Replace Current IDL Contents?")) {
+  if (skipPrompt || confirm("Replace Current IDL Contents?")) {
     return fetch(path.join(_manifest.root, mFile))
       .then(async (data) => {
         IDLDocument.set(mFile);
