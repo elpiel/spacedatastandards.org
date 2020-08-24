@@ -3,28 +3,14 @@
   import {
     IDLDocument,
     manifest,
-    IDLEditorContents
+    IDLEditorContents,
+    loadFile
   } from "../../stores/Files.js";
   import path from "path-browserify";
   export let loaded;
-  export let args;
+
   export let toggleMenu;
 
-  let loadFile = mFile => {
-    if (!$IDLEditorContents || confirm("Replace Current IDL Contents?")) {
-      fetch(path.join($manifest.root, mFile))
-        .then(async data => {
-          $IDLDocument = mFile;
-          $IDLEditorContents = "";
-          $IDLEditorContents = await data.text();
-          loaded = true;
-        })
-        .catch(e => {
-          alert(`Fetch Failed With Error: ${e}`);
-          loaded = true;
-        });
-    }
-  };
   const clearLocalData = () => {
     if (confirm("clear data")) {
       localStorage.clear();
@@ -34,6 +20,9 @@
   };
   onMount(() => {
     loaded = true;
+    if (!$IDLDocument) {
+      loadFile($manifest.files[0].filename);
+    }
   });
 </script>
 
@@ -146,7 +135,7 @@
           class="text"
           on:click={e => {
             loaded = false;
-            loadFile(mfile.filename);
+            loadFile(mfile.filename, $manifest);
             window.location.hash = '/idl';
             toggleMenu(false);
           }}>

@@ -22,7 +22,8 @@
     CodeEditorLanguage,
     TestEditorDocument,
     TestEditorContents,
-    saveEventTime
+    saveEventTime,
+    loadFile
   } from "./stores/Files.js";
 
   let menuOpen = false;
@@ -131,8 +132,11 @@
     }
   };
 
-  onMount(() => {
+  onMount(async () => {
     window.addEventListener("keydown", sEvent);
+    if (!$IDLEditorContents) {
+      let loaded = await loadFile($manifest.files[0].filename, $manifest);
+    }
   });
   onDestroy(() => {
     window.removeEventListener("keydown", sEvent);
@@ -141,7 +145,9 @@
 
 <style>
   :global(:root) {
-    --font-size-sm: calc(minmax((0.85rem + 0.5 * ((100vw - 50rem) / 120)), 12px));
+    --font-size-sm: calc(
+      minmax((0.85rem + 0.5 * ((100vw - 50rem) / 120)), 12px)
+    );
     --font-size-btn: calc((1.5rem + 0.5 * ((100vw - 50rem) / 120)));
     --font-size-header: calc((1rem + 0.5 * ((100vw - 80rem) / 120)));
     --celestrak-blue: #1e5cad;
