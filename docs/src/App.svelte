@@ -135,7 +135,7 @@
   onMount(async () => {
     window.addEventListener("keydown", sEvent);
     if (!$IDLEditorContents) {
-      let loaded = await loadFile($manifest.files[0].filename, $manifest);
+      let loaded = await loadFile($manifest.files[0].filename, $manifest, true);
     }
   });
   onDestroy(() => {
