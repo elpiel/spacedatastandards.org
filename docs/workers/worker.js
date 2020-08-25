@@ -40,7 +40,7 @@ const convert = async function (e) {
       rootDir: "/",
     });
 
-    let command = ["./flatc", currentLanguage[0], "-o", "/root", "/root/IDLDocument.fbs", "--gen-mutable"];
+    let command = ["./flatc", currentLanguage[0], "-o", "/root", "/root/IDLDocument.fbs", "--gen-mutable", "--reflect-names", "--reflect-types"];
     if (flags) command = command.concat(flags);
     if (IDLEditorContents.match(/root_type \w{1,};/)) command.push("--jsonschema");
     await fb.runCommand(command);

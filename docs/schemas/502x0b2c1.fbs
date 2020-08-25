@@ -284,8 +284,7 @@ table SATCAT {
   PERIGEE:float;
   RCS:float;
   DATA_STATUS_CODE:orbitalStatusCode;
-  ORBIT_CENTER:orbitCenter =  EARTH;
-  DOCK_CENTER:string;
+  ORBIT_CENTER: string;
   ORBIT_TYPE:orbitType;
 }
 
