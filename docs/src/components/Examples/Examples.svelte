@@ -1,6 +1,6 @@
 <script>
   import OMM from "./OMM.svelte";
-  import CAT from "./CAT.svelte";
+  import CAT from "./SATCAT.svelte";
 
   import { onMount, onDestroy } from "svelte";
 
@@ -14,7 +14,7 @@
   export let args;
   export let toggleMenu;
 
-  let examples = { OMM, CAT };
+  let examples = { OMM, SATCAT };
   let activeComponent;
 
   onMount(() => {
