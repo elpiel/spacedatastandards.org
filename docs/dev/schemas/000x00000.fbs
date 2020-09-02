@@ -1,9 +1,13 @@
 //https://www.celestrak.com/satcat/satcat-format.php
 
 enum objType: byte  {
+  ///0
   PAYLOAD,
+  ///1
   DEBRIS,
+  ///2
   ROCKET_BODY,
+  ///3
   UNKNOWN
 }
 
@@ -75,24 +79,23 @@ enum orbitCenter: byte {
 
 enum orbitType: byte {
   ///0
-  Orbit,
+  ORBIT,
   ///1
-  Landing,
+  DOCKED,
   ///2
-  Impact,
+  LANDING,
   ///3
-  Roundtrip
+  IMPACT
 }
 
-table CAT {
+table SATCAT {
   OBJECT_NAME:string;
   OBJECT_ID:string;
   NORAD_CAT_ID:uint;
   MULTIPLE_NAMES: bool;
-  TYPE:objType = UNKNOWN;
-  //PAYLOAD:bool;
+  OBJECT_TYPE:objType = UNKNOWN;
   OPS_STATUS_CODE:opsStatusCode = UNKNOWN;
-  ORIGINATOR:string;
+  OWNER:string;
   LAUNCH_DATE:string;
   LAUNCH_SITE:string;
   DECAY_DATE:string;
@@ -101,8 +104,8 @@ table CAT {
   APOGEE:float;
   PERIGEE:float;
   RCS:float;
-  ORBITAL_STATUS_CODE:orbitalStatusCode;
-  ORBIT_CENTER:orbitCenter =  EARTH;
+  DATA_STATUS_CODE:orbitalStatusCode;
+  ORBIT_CENTER: string;
   ORBIT_TYPE:orbitType;
 }
 
@@ -111,8 +114,9 @@ enum massType: byte {
   WET
 }
 
-table PAY {
+table PAYLOAD {
   OBJECT_ID:string;
+  OBJECT_NAME:string;
   DEPLOYMENT_DATE:string;
   MANEUVERABLE:bool;
   SIZE:float;
@@ -120,4 +124,4 @@ table PAY {
   MASS_TYPE:massType = DRY;
 }
 
-root_type CAT;
+root_type SATCAT;
