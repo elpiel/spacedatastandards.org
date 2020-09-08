@@ -61,7 +61,7 @@
   let startLine = 0;
   let total = 0;
   let pageSize = 10;
-  $: current = Math.min(Math.max(current, 1), total - pageSize + 1) || 0;
+  $: current = Math.min(Math.max(current, 1), total) || 0;
   let currentVersion = "RAW";
   let filtered = [];
   let filter = "";
