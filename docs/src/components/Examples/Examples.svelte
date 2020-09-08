@@ -1,6 +1,6 @@
 <script>
   import OMM from "./OMM.svelte";
-  import CAT from "./SATCAT.svelte";
+  import SATCAT from "./SATCAT.svelte";
 
   import { onMount, onDestroy } from "svelte";
 
