@@ -58,8 +58,8 @@
     for (let k = 0; k < keys.length; k++) {
       let key = keys[k];
       _v[key] = tofixed(v[key]);
-      if (schema.definitions.CAT.properties[key].$ref) {
-        let _key = schema.definitions.CAT.properties[key].$ref.split(
+      if (schema.definitions.SATCAT.properties[key].$ref) {
+        let _key = schema.definitions.SATCAT.properties[key].$ref.split(
           "/definitions/"
         )[1];
 
@@ -77,7 +77,7 @@
     "CAT (KEY / VALUE)": v => {
       if (!v) return;
       let _v = parseUp(
-        Reflect.ownKeys(schema.definitions.CAT.properties),
+        Reflect.ownKeys(schema.definitions.SATCAT.properties),
         catalog.format.CAT(v)
       );
       let _max =
@@ -100,7 +100,7 @@
     "CAT (CSV)": v => {
       if (!v) return;
       let _v = parseUp(
-        Reflect.ownKeys(schema.definitions.CAT.properties),
+        Reflect.ownKeys(schema.definitions.SATCAT.properties),
         catalog.format.CAT(v)
       );
       console.log(_v);
@@ -109,7 +109,7 @@
     "CAT (JSON)": v => {
       if (!v) return;
       let _v = parseUp(
-        Reflect.ownKeys(schema.definitions.CAT.properties),
+        Reflect.ownKeys(schema.definitions.SATCAT.properties),
         catalog.format.CAT(v)
       );
       return JSON.stringify(_v, null, 4).replace(
@@ -120,17 +120,17 @@
     "CAT (FLATBUFFER)": v => {
       if (!v) return;
       v = catalog.format.CAT(v);
-      let { CAT } = FlatBuffer;
+      let { SATCAT } = FlatBuffer;
       let builder = new flatbuffers.Builder(0);
-      let shim = Object.keys(schema.definitions.CAT.properties);
+      let shim = Object.keys(schema.definitions.SATCAT.properties);
       let intermediate = {};
       shim.forEach(canonicalname => {
         let mangledname = canonicalname.replace(/_/g, "").toUpperCase();
-        for (let prop in CAT) {
+        for (let prop in SATCAT) {
           if (prop.indexOf(mangledname) > -1) {
             if (v[canonicalname] || v[canonicalname] === 0) {
               let schemaValue =
-                schema.definitions.CAT.properties[canonicalname];
+                schema.definitions.SATCAT.properties[canonicalname];
               intermediate[prop] = { canonicalname, mangledname };
               let _value = v[canonicalname];
               switch (schemaValue.type) {
@@ -146,13 +146,13 @@
         }
       });
 
-      CAT.startCAT(builder);
+      SATCAT.startSATCAT(builder);
 
       for (let prop in intermediate) {
-        CAT[prop](builder, intermediate[prop].value);
+        SATCAT[prop](builder, intermediate[prop].value);
       }
 
-      var BuiltCAT = CAT.endCAT(builder);
+      var BuiltCAT = SATCAT.endSATCAT(builder);
 
       builder.finish(BuiltCAT);
 
@@ -242,6 +242,7 @@
       "code-top-container"
     ).style.height = `calc(${window.innerHeight}px - var(--header-height))`);
   onMount(async () => {
+    document.documentElement.style.setProperty("--overflow-wrap", "break-word");
     if (!$IDLDocument) {
       window.location.hash = "/select";
     }
