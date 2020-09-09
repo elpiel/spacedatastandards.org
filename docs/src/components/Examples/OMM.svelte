@@ -103,8 +103,7 @@
             .length + 1;
         return Object.entries(_v)
           .map(kv => {
-            let _v =
-              kv[1] instanceof Date ? JSON.stringify(kv[1]) : tofixed(kv[1]);
+            let _v = kv[1] instanceof Date ? kv[1].toString() : tofixed(kv[1]);
             let _value =
               _v !== null && _v !== undefined
                 ? _v.toString().replace(/"/g, "")
@@ -132,7 +131,7 @@
           let key = skeys[k];
           let _v =
             v[key] instanceof Date
-              ? JSON.stringify(v[key])
+              ? v[key].toString()
               : tofixed(v[key]) || "null";
 
           v[key] = _v.toString().replace(/"/g, "");
@@ -154,7 +153,7 @@
         let keys = Reflect.ownKeys(schema.definitions.OMM.properties);
         for (let k = 0; k < keys.length; k++) {
           let key = keys[k];
-          let _v = v[key] instanceof Date ? v[key] : tofixed(v[key]) || null;
+          let _v = v[key] instanceof Date ? v[key].toString() : tofixed(v[key]) || null;
 
           if (checkNull(showNull, _v)) {
             _json[key] = _v || null;
@@ -162,7 +161,6 @@
         }
         return _json;
       });
-
       return JSON.stringify(_jsona, null, 4).replace(
         /"([\-+\s]?[0-9]+\.{0,1}[0-9]*)"/g,
         "$1"
@@ -181,7 +179,7 @@
         Object.entries(_v).map(kv => {
           _v[kv[0]] =
             kv[1] instanceof Date
-              ? JSON.stringify(kv[1]).replace(/"([\s\S]{1,})"/gm, "$1")
+              ? kv[1].toString()
               : tofixed(kv[1]) || "";
         });
         return XMLOMM(showNull, tags, _v);

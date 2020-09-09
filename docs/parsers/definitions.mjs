@@ -144,15 +144,14 @@ const tle_transform = {
     });
 
     let _epoch = new Date(Date.UTC.apply(0, tA));
-    /*
-    let jdate = new JulianDate();
-    JulianDate.fromDate(_epoch, jdate); //converts to TAI https://github.com/CesiumGS/cesium/blob/1.69/Source/Core/JulianDate.js#L299
-    console.log(Juliandate.totalDays(jdate));
-    */
+    _epoch.toString = function () {
+      return JSON.stringify(this).replace(/z/ig, '').replace(/"([\s\S]{1,})"/gm, "$1")
+    };
+
     _epoch.microseconds = parseInt(tA[tA.length - 1] * 1000);
     return _epoch;
   },
-  
+
 };
 
 export { satcat_map, satcat_transform, tle_map, tle_transform };
