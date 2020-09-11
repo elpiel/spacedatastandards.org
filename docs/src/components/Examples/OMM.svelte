@@ -234,10 +234,7 @@
                     );
                     break;
                 }
-                console.log(prop, !!(checkNull(showNull, _value) && _value));
-                if (checkNull(showNull, _value) && _value) {
-                  intermediate[prop].value = _value;
-                }
+                intermediate[prop].value = _value;
               }
             }
           }
