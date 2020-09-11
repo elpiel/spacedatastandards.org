@@ -223,7 +223,13 @@
                     break;
                   case "string":
                     _value = builder.createString(
-                      new Uint8Array(new Buffer(typeof _value === "string" ? _value : _value.toString()))
+                      new Uint8Array(
+                        new Buffer(
+                          typeof _value === "string"
+                            ? _value
+                            : _value.toString()
+                        )
+                      )
                     );
                     break;
                 }
@@ -239,9 +245,6 @@
         OMM.startOMM(builder);
         for (let prop in intermediate) {
           let { value, canonicalname } = intermediate[prop];
-          if (prop === "addEPOCH") {
-            console.log(value, canonicalname);
-          }
           OMM[prop](builder, value);
         }
         var BuiltOMM = OMM.endOMM(builder);
@@ -261,12 +264,10 @@
       var buf = builder.dataBuffer();
 
       let testCollection = OMMCOLLECTION.getRootAsOMMCOLLECTION(buf);
-      let testSAT = testCollection.RECORDS(1);
 
-      console.log(testSAT.EPOCH());
       let uint8 = builder.asUint8Array();
-      var decoder = new TextDecoder("utf8");
-      var b64encoded = btoa(
+      let decoder = new TextDecoder("utf8");
+      let b64encoded = btoa(
         unescape(encodeURIComponent(decoder.decode(uint8)))
       );
       return uint8;
