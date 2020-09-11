@@ -142,16 +142,8 @@ const tle_transform = {
     tA = tA.filter((v, i) => {
       return i % 2 || i == 0 || i == tA.length - 1;
     });
-
-    let _epoch = new Date(Date.UTC.apply(0, tA));
-    _epoch.toString = function () {
-      return JSON.stringify(this).replace(/z/ig, '').replace(/"([\s\S]{1,})"/gm, "$1")
-    };
-
-    _epoch.microseconds = parseInt(tA[tA.length - 1] * 1000);
-    return _epoch;
-  },
-
+    return (new Date(Date.UTC.apply(0, tA))).toISOString().replace(/z/ig, '').split('.')[0] + '.' + (parseFloat(tA[tA.length - 1].toFixed(3) * 1000).toString()).padStart(6, '0');
+  }
 };
 
 export { satcat_map, satcat_transform, tle_map, tle_transform };
