@@ -69,7 +69,7 @@
 
   let versionExtensions = {
     RAW: "txt",
-    "OMM (KEY / VALUE)": "txt",
+    "OMM (KEY / VALUE)": "kvn.txt",
     "OMM (CSV)": "csv",
     "OMM (JSON)": "json",
     "OMM (XML)": "xml",
@@ -77,7 +77,7 @@
   };
   let versionsKey = {
     raw: "RAW",
-    kv: "OMM (KEY / VALUE)",
+    kvn: "OMM (KEY/VALUE)",
     csv: "OMM (CSV)",
     json: "OMM (JSON)",
     xml: "OMM (XML)",
@@ -220,6 +220,7 @@
                 let _value = v[canonicalname];
                 switch (schemaValue.type) {
                   case "number":
+                    _value = +_value;
                     break;
                   case "string":
                     _value = builder.createString(
@@ -233,7 +234,10 @@
                     );
                     break;
                 }
-                intermediate[prop].value = _value;
+                console.log(prop, !!(checkNull(showNull, _value) && _value));
+                if (checkNull(showNull, _value) && _value) {
+                  intermediate[prop].value = _value;
+                }
               }
             }
           }
