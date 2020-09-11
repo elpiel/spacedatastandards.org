@@ -1,4 +1,5 @@
 <script>
+  import { Buffer } from "buffer/";
   import { onMount, onDestroy } from "svelte";
   import { tle, satcat, vcm } from "../../../parsers/legacy.mjs";
   import {
@@ -153,7 +154,10 @@
         let keys = Reflect.ownKeys(schema.definitions.OMM.properties);
         for (let k = 0; k < keys.length; k++) {
           let key = keys[k];
-          let _v = v[key] instanceof Date ? v[key].toString() : tofixed(v[key]) || null;
+          let _v =
+            v[key] instanceof Date
+              ? v[key].toString()
+              : tofixed(v[key]) || null;
 
           if (checkNull(showNull, _v)) {
             _json[key] = _v || null;
@@ -178,9 +182,7 @@
 
         Object.entries(_v).map(kv => {
           _v[kv[0]] =
-            kv[1] instanceof Date
-              ? kv[1].toString()
-              : tofixed(kv[1]) || "";
+            kv[1] instanceof Date ? kv[1].toString() : tofixed(kv[1]) || "";
         });
         return XMLOMM(showNull, tags, _v);
       });
@@ -220,7 +222,9 @@
                   case "number":
                     break;
                   case "string":
-                    _value = builder.createString(_value);
+                    _value = builder.createString(
+                      new Uint8Array(new Buffer(typeof _value === "string" ? _value : _value.toString()))
+                    );
                     break;
                 }
                 intermediate[prop].value = _value;
@@ -234,10 +238,13 @@
       let records = intermediates.map(intermediate => {
         OMM.startOMM(builder);
         for (let prop in intermediate) {
-          OMM[prop](builder, intermediate[prop].value);
+          let { value, canonicalname } = intermediate[prop];
+          if (prop === "addEPOCH") {
+            console.log(value, canonicalname);
+          }
+          OMM[prop](builder, value);
         }
         var BuiltOMM = OMM.endOMM(builder);
-        builder.finish(BuiltOMM);
         return BuiltOMM;
       });
 
@@ -252,6 +259,11 @@
       builder.finish(COLLECTION);
 
       var buf = builder.dataBuffer();
+
+      let testCollection = OMMCOLLECTION.getRootAsOMMCOLLECTION(buf);
+      let testSAT = testCollection.RECORDS(1);
+
+      console.log(testSAT.EPOCH());
       let uint8 = builder.asUint8Array();
       var decoder = new TextDecoder("utf8");
       var b64encoded = btoa(

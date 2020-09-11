@@ -39,7 +39,8 @@
   },
   "homepage": "https://github.com/DigitalArsenal/spacedatastandards.org#readme",
   "dependencies": {
-    "bignumber.js": "^9.0.0"
+    "bignumber.js": "^9.0.0",
+    "buffer": "^5.6.0"
   },
   "devDependencies": {
     "readline-sync": "^1.4.10"

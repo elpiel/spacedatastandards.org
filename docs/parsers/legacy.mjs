@@ -20,12 +20,21 @@ class lineReader {
         const utf8Decoder = new TextDecoder("utf-8");
         let leRegex = /[\r\n]{1,2}/gm;
 
-        let { value, done } = await reader.read();
+        let result = await reader.read();
+
+        if (result === null) yield;
+        let value, done;
+        if (result.value) {
+          value = result.value;
+          done = result.done;
+        } else {
+          value = result;
+        }
         value = value ? utf8Decoder.decode(value) : "";
 
         let startIndex = 0;
 
-        for (;;) {
+        for (; ;) {
           let remline = leRegex.exec(value);
           //only progress if there are more lines
           if (!remline) {

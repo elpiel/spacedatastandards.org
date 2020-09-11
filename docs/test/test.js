@@ -123,8 +123,11 @@ function main() {
     for (let prop in intermediate) {
       let { canonicalname } = intermediate[prop];
 
-      if (typeof GOES9[canonicalname] === "function")
+      if (typeof GOES9[canonicalname] === "function"){
         Object.defineProperty(GOES9, canonicalname, { get: GOES9[canonicalname] });
+      }else{
+        throw Error(`Missing ${canonicalname}`);
+      }
     }
 
     for (let prop in SAT_TEST_OBJ) {
