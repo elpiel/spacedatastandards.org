@@ -225,7 +225,7 @@
                   case "string":
                     _value = builder.createString(
                       new Uint8Array(
-                        new Buffer(
+                        Buffer.from(
                           typeof _value === "string"
                             ? _value
                             : _value.toString()
