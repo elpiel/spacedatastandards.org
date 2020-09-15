@@ -16,34 +16,9 @@
     checkNull,
     makeArray,
     tofixed,
-    tagTypes,
     XMLOMM
   } from "./OMM_UTILITIES.mjs";
-  import navCommon_xsd from "../../../test/ndmxml-1.0-navwg-common.xsd";
-  import omm_xsd from "../../../test/ndmxml-1.0-omm-2.0.xsd";
-  let parser = new DOMParser();
-  let _xml;
-  let [navCommon_xsd_xml, omm_xsd_xml] = (_xml = [navCommon_xsd, omm_xsd].map(
-    raw => parser.parseFromString(raw, "text/xml")
-  ));
-
-  _xml.forEach(xx => {
-    Object.keys(tagTypes).forEach(tt => {
-      tagTypes[tt] = tagTypes[tt].concat(
-        makeArray(xx.documentElement.getElementsByTagName(tt))
-      );
-    });
-  });
-
-  let tags = {};
-
-  Object.values(tagTypes).map(ta => {
-    ta.forEach(ttt => {
-      if (ttt.attributes.getNamedItem("name")) {
-        tags[ttt.attributes.getNamedItem("name").value] = ttt;
-      }
-    });
-  });
+  
   const workerPath = "/workers/worker.js";
   let showNull = true;
 
@@ -171,21 +146,9 @@
       );
     },
     "OMM (XML)": raw => {
-      let varray = raw.map(v => {
-        v = tles.format.OMM(v);
-        let _v = {};
-        let keys = Reflect.ownKeys(schema.definitions.OMM.properties);
-        for (let k = 0; k < keys.length; k++) {
-          let key = keys[k];
-          _v[key] = v[key] || null;
-        }
-
-        Object.entries(_v).map(kv => {
-          _v[kv[0]] =
-            kv[1] instanceof Date ? kv[1].toString() : tofixed(kv[1]) || "";
-        });
-        return XMLOMM(showNull, tags, _v);
-      });
+      let varray = raw.map(tles.format.OMM);
+      return XMLOMM(showNull, varray);
+    } /*
       let xmlString = `<?xml version="1.0" encoding="UTF-8"?>
 <ndm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sanaregistry.org/r/ndmxml/ndmxml-1.0-master.xsd">`;
       xmlString += varray.join("\n");
@@ -199,7 +162,7 @@
           { indentation: "  ", collapseContent: true }
         )
       );
-    },
+    },*/,
     "OMM (FLATBUFFER)": raw => {
       if (!raw) return;
       let { OMM, OMMCOLLECTION } = FlatBuffer;
