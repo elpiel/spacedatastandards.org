@@ -41,45 +41,6 @@ let rMap = {
   covarianceMatrix: "covarianceMatrixElementsGroup"
 };
 
-const subTags = {
-  userDefinedParameters: (a, b, c, d, showNull) => {
-    let ud = "user_defined";
-    let userkeys = Object.keys(c).filter(
-      n => n.toLowerCase().indexOf(ud) > -1
-    );
-    let keyText = userkeys
-      .map(k => {
-        if (checkNull(showNull, c[k])) {
-          return `\t${tagUp("USER_DEFINED", c[k], {
-            parameter: k
-              .toLowerCase()
-              .replace(ud + "_", "")
-              .toUpperCase()
-          })}`;
-        }
-      })
-      .filter(Boolean)
-      .join("\n");
-    return keyText;
-  }
-};
-
-const genTags = (showNull, tags, a, _v) => {
-  return getKids(tags[a]).map(n => {
-    if (tags[n + "Type"] || tags[rMap[n]] || subTags[n]) {
-      if (subTags[n]) {
-        _v[n] = subTags[n](tags, tags[rMap[n]] ? rMap[n] : n + "Type", _v, showNull);
-      } else {
-        _v[n] = genTags(showNull, tags, tags[rMap[n]] ? rMap[n] : n + "Type", _v).join(
-          "\n"
-        );
-      }
-    }
-    if (checkNull(showNull, _v[n])) {
-      return `\t${tagUp(n, _v[n])}`;
-    }
-  });
-};
 let tofixed = n => {
   if (!isNaN(n) && (typeof n === "number" || n instanceof bignumber)) {
     let place = n % 1 ? 15 : 0;
@@ -153,4 +114,4 @@ const XMLOMM = (showNull, v) => {
   return root.end({ prettyPrint: true });
 }
 
-export { checkNull, makeArray, getElementsByAttribute, getKids, aMap, tagUp, subTags, genTags, tofixed, XMLOMM };
+export { checkNull, makeArray, getElementsByAttribute, getKids, aMap, tofixed, XMLOMM };
