@@ -64,18 +64,26 @@ const XMLOMM = (showNull, v) => {
     elSet.domEl = elSet.schema.getElementsByName(elSet.elementName)[0].getElementsByTagName('xsd:sequence')[0];
     return elSet;
   });
+
   let endElements = {};
+
+  const walkElement = (cEl, segment, tagName) => {
+    if (cEl.tagName === "xsd:element") {
+      let nodeName = cEl.getAttribute("name");
+      segments[segment].childNodeNames.push(nodeName);
+      endElements[tagName] = endElements[tagName] || { childNodes: [] };
+      endElements[tagName].childNodes.push(nodeName);
+    } else if (cEl.childNodes.length) {
+      for (let ccEl = 0; ccEl < cEl.childNodes.length; ccEl++) {
+        walkElement(cEl.childNodes[ccEl], segment, tagName);
+      }
+    }
+  }
+
   for (let segment = 0; segment < segments.length; segment++) {
     let { domEl, tagName } = segments[segment];
-
     for (let hN = 0; hN < domEl.childNodes.length; hN++) {
-      if (domEl.childNodes[hN].tagName === "xsd:element") {
-        let nodeName = domEl.childNodes[hN].getAttribute("name");
-        segments[segment].childNodeNames.push(nodeName);
-        endElements[tagName] = endElements[tagName] || { childNodes: [] };
-        endElements[tagName].childNodes.push(nodeName);
-      }
-
+      walkElement(domEl.childNodes[hN], segment, tagName);
     };
   }
 
