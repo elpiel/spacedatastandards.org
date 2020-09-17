@@ -67,15 +67,13 @@ const XMLOMM = (showNull, v) => {
 
   let endElements = {};
 
-  const walkElement = (cEl, segment, tagName) => {
+  const walkElement = (cEl, segment, tagName, parent) => {
     if (cEl.tagName === "xsd:element") {
-      let nodeName = cEl.getAttribute("name");
-      segments[segment].childNodeNames.push(nodeName);
       endElements[tagName] = endElements[tagName] || { childNodes: [] };
-      endElements[tagName].childNodes.push(nodeName);
+      endElements[tagName].childNodes.push(cEl);
     } else if (cEl.childNodes.length) {
       for (let ccEl = 0; ccEl < cEl.childNodes.length; ccEl++) {
-        walkElement(cEl.childNodes[ccEl], segment, tagName);
+        walkElement(cEl.childNodes[ccEl], segment, tagName, cEl);
       }
     }
   }
@@ -99,25 +97,28 @@ const XMLOMM = (showNull, v) => {
       v[i][vprop] = v[i][vprop].toNumber ? v[i][vprop].toNumber() : v[i][vprop];
     };
 
+
+    let hNodeFunc = (endElementName, _element) => {
+      _element = _element.ele(endElementName);
+      let eE = endElements[endElementName];
+      eE.childNodes.forEach(
+        hNode => {
+          let name = hNode.getAttribute("name");
+          if (showNull &&
+            hNode.parentNode.tagName !== "xsd:choice"
+            || v[i][name]) {
+            _element.ele(name).txt(v[i][name]);
+          }
+        });
+    }
+
     let omm = root.ele('omm', { "id": "CCSDS_OMM_VERS", "version": "2.0" });
-    let header = omm.ele('header');
-    endElements['header'].childNodes.forEach(hNode => {
-      if (showNull || v[i][hNode]) {
-        header.ele(hNode).txt(v[i][hNode]);
-      }
-    });
-
+    hNodeFunc('header', omm);
     let bodySegment = omm.ele('body').ele('segment');
-
-    let hNodeFunc = (_element) => hNode => {
-      if (showNull || v[i][hNode]) {
-        _element.ele(hNode).txt(v[i][hNode]);
-      }
-    };
-    endElements['metadata'].childNodes.forEach(hNodeFunc(bodySegment.ele('metadata')));
+    hNodeFunc('metadata', bodySegment);
     let bodySegmentData = bodySegment.ele('data');
-    endElements['meanElements'].childNodes.forEach(hNodeFunc(bodySegmentData.ele('meanElements')));
-    endElements['tleParameters'].childNodes.forEach(hNodeFunc(bodySegmentData.ele('tleParameters')));
+    hNodeFunc('meanElements', bodySegmentData);
+    hNodeFunc('tleParameters', bodySegmentData);
   }
   return root.end({ prettyPrint: true });
 }
