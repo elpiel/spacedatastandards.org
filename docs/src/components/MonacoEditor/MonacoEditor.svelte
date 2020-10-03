@@ -101,7 +101,7 @@
 
 <svelte:head>
   <script type="module">
-    import monaco from "https://digitalarsenal.io/lib/monacoeditor.js";
+    import monaco from "https://cdn.digitalarsenal.io/lib/monacoeditor.js";
     createEditor();
   </script>
 </svelte:head>
