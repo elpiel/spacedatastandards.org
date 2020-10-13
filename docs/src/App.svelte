@@ -325,7 +325,7 @@
     type="text/javascript" />
   <link
     rel="prefetch"
-    href="https://old.digitalarsenal.io/lib/flatbuffers.js"
+    href="https://cdn.digitalarsenal.io/lib/flatbuffers.js"
     as="worker"
     type="text/javascript" />
   <meta

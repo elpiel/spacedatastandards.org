@@ -1,4 +1,4 @@
-import { flatc } from "https://old.digitalarsenal.io/lib/flatbuffers.js";
+import { flatc } from "https://cdn.digitalarsenal.io/lib/flatbuffers.js";
 import WasmFs from "../lib/wasmer/wasmfs.esm.js";
 
 const join = (...args) => {
