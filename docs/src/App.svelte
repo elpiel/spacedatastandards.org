@@ -23,7 +23,7 @@
     TestEditorDocument,
     TestEditorContents,
     saveEventTime,
-    loadFile
+    loadFile,
   } from "./stores/Files.js";
 
   let menuOpen = false;
@@ -44,7 +44,7 @@
 
   let activeComponent = Editor;
 
-  let defaultPath = params => {
+  let defaultPath = (params) => {
     setRoute(params, Main);
   };
 
@@ -52,58 +52,58 @@
 
   router.on("/", defaultPath);
   router.on("/#/", defaultPath);
-  router.on("/#/select", params => {
+  router.on("/#/select", (params) => {
     args = {};
     setRoute(params, Select);
   });
-  router.on("/#/idl", params => {
+  router.on("/#/idl", (params) => {
     args = {
       documentName: IDLDocument,
       editorContents: IDLEditorContents,
       language: "flatbuffers",
       theme: "flatbuffers",
-      _class: "editor1"
+      _class: "editor1",
     };
     setRoute(params, Editor);
   });
 
-  router.on("/#/code", params => {
+  router.on("/#/code", (params) => {
     args = {
       documentName: CodeEditorActiveDocument,
       editorContents: CodeEditorContents,
       language: "",
       theme: "",
       _class: "editor1",
-      readOnly: true
+      readOnly: true,
     };
     setRoute(params, Code);
   });
-  router.on("/#/examples.*", params => {
+  router.on("/#/examples.*", (params) => {
     args = {
       documentName: "",
       editorContents: "",
       language: "",
       theme: "",
       _class: "editor1",
-      readOnly: true
+      readOnly: true,
     };
     setRoute(params, Examples);
   });
-  router.on("/#/test", params => {
+  router.on("/#/test", (params) => {
     args = {
       documentName: TestEditorDocument,
       editorContents: TestEditorContents,
       language: "",
       theme: "",
       _class: "editor1",
-      readOnly: true
+      readOnly: true,
     };
     setRoute(params, Test);
   });
 
   router.listen();
 
-  const toggleMenu = value => {
+  const toggleMenu = (value) => {
     menuOpen = value !== undefined ? value : !menuOpen;
     let posVal = menuOpen
       ? window.innerWidth > 1024
@@ -125,7 +125,7 @@
     download(dL[0], dL[1], "text/plain");
   }
 
-  const sEvent = event => {
+  const sEvent = (event) => {
     if (event.which == 83 && event.ctrlKey) {
       event.preventDefault();
       $saveEventTime = new Date();
@@ -325,14 +325,13 @@
     type="text/javascript" />
   <link
     rel="prefetch"
-    href="https://cdn.digitalarsenal.io/lib/flatbuffers.js"
+    href="https://old.digitalarsenal.io/lib/flatbuffers.js"
     as="worker"
     type="text/javascript" />
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0,
     user-scalable=no, viewport-fit=contain" />
-
 </svelte:head>
 <svelte:options accessors={true} />
 <menu class:navActive={menuOpen}>
@@ -392,9 +391,7 @@
 </menu>
 <container>
   <header>
-    <div id="menuButton" on:click={() => toggleMenu()}>
-      <span>☰</span>
-    </div>
+    <div id="menuButton" on:click={() => toggleMenu()}><span>☰</span></div>
     <div id="mainHeader">
       <span>
         <a style="border:none" target="_blank" href={githubURL}>
@@ -407,10 +404,7 @@
         <a target="_blank" href={link} on:click={() => toggleMenu()}>
           {linkName}
         </a>
-        <!--<a href="javascript:" on:click={() => createDownload()}>SAVE</a>-->
-      {:else}
-        <a href="#/select">SELECT...</a>
-      {/if}
+      {:else}<a href="#/select">SELECT...</a>{/if}
     </div>
   </header>
   <main>
@@ -425,6 +419,5 @@
         {args}
         {toggleMenu} />
     </div>
-
   </main>
 </container>

@@ -9356,7 +9356,7 @@ var app = (function () {
     			attr_dev(link0, "type", "text/javascript");
     			add_location(link0, file$7, 311, 2, 7344);
     			attr_dev(link1, "rel", "prefetch");
-    			attr_dev(link1, "href", "https://cdn.digitalarsenal.io/lib/flatbuffers.js");
+    			attr_dev(link1, "href", "https://old.digitalarsenal.io/lib/flatbuffers.js");
     			attr_dev(link1, "as", "worker");
     			attr_dev(link1, "type", "text/javascript");
     			add_location(link1, file$7, 316, 2, 7452);
