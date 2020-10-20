@@ -304,3 +304,4 @@ table PAYLOAD {
 }
 
 root_type OMM;
+file_identifier "$OMM";
