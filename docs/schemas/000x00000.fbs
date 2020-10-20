@@ -125,3 +125,4 @@ table PAYLOAD {
 }
 
 root_type SATCAT;
+file_identifier "$CAT";
