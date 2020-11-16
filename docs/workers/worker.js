@@ -1,4 +1,4 @@
-import { flatc } from "https://cdn.digitalarsenal.io/lib/flatbuffers.js";
+import { flatc } from "https://digitalarsenal.io/lib/flatbuffers.js";
 import WasmFs from "../lib/wasmer/wasmfs.esm.js";
 
 const join = (...args) => {
@@ -40,19 +40,9 @@ const convert = async function (e) {
       rootDir: "/",
     });
 
-    let command = [
-      "./flatc",
-      currentLanguage[0],
-      "-o",
-      "/root",
-      "/root/IDLDocument.fbs",
-      "--gen-mutable",
-      "--reflect-names",
-      "--reflect-types",
-    ];
+    let command = ["./flatc", currentLanguage[0], "-o", "/root", "/root/IDLDocument.fbs", "--gen-mutable", "--reflect-names", "--reflect-types"];
     if (flags) command = command.concat(flags);
-    if (IDLEditorContents.match(/root_type \w{1,};/))
-      command.push("--jsonschema");
+    if (IDLEditorContents.match(/root_type \w{1,};/)) command.push("--jsonschema");
     await fb.runCommand(command);
     window.errPipe = fs.createReadStream("/dev/stderr");
     window.outPipe = fs.createReadStream("/dev/stdout");
@@ -72,7 +62,7 @@ const convert = async function (e) {
       }
     });
   } catch (e) {
-    result.error = `Code Generation Failed:  Check Syntax And Try Again.`;
+    result.error = `Code Generation Failed:  Check Syntax And Try Again. ${e.name}: ${e.message}`;
   }
   result.loaded = true;
   if (isWorker) {
