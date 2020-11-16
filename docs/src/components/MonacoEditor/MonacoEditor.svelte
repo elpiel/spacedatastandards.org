@@ -7,6 +7,7 @@
   export let args;
 
   let editor;
+  export let toggleMenu = null;
 
   let {
     documentName,
@@ -15,10 +16,10 @@
     _style,
     language = "javascript",
     theme = "vs",
-    readOnly = false
+    readOnly = false,
   } = args;
 
-  const setEditorLanguage = n => {
+  const setEditorLanguage = (n) => {
     if (!n) return;
     let language;
     if (globalThis.monaco) {
@@ -44,7 +45,7 @@
 
   documentName.subscribe(setEditorLanguage);
 
-  editorContents.subscribe(e => {
+  editorContents.subscribe((e) => {
     if (editor && editor.getValue() !== e) {
       editor.setValue(e);
     }
@@ -70,15 +71,15 @@
           { token: "storage.type.flatbuffers", foreground: "2f45eb" },
           { token: "keyword.name.flatbuffers", foreground: "00d44a" },
           { token: "keyword.comments.flatbuffers", foreground: "00aa00" },
-          { token: "keyword.local.comment.flatbuffers", foreground: "3300cc" }
-        ]
+          { token: "keyword.local.comment.flatbuffers", foreground: "3300cc" },
+        ],
       });
       monaco.languages.register({ id: "flatbuffers", extensions: [".fbs"] });
       editor = monaco.editor.create(document.getElementById("monacoeditor"), {
         value: $editorContents,
         language: language,
         theme: theme,
-        automaticLayout: true
+        automaticLayout: true,
       });
       globalThis.editor = editor;
       editor.onDidChangeModelContent(setC);
@@ -87,7 +88,7 @@
     }
     loaded = true;
   };
-  onMount(function() {
+  onMount(function () {
     createEditor();
     setEditorLanguage($documentName);
   });
@@ -96,7 +97,6 @@
 </script>
 
 <style>
-
 </style>
 
 <svelte:head>
