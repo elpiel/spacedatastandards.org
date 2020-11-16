@@ -72,7 +72,7 @@ const convert = async function (e) {
       }
     });
   } catch (e) {
-    result.error = `Code Generation Failed:  Check Syntax And Try Again.`;
+    result.error = `Code Generation Failed:  Check Syntax And Try Again. ${e.name}: ${e.message}`;
   }
   result.loaded = true;
   if (isWorker) {
