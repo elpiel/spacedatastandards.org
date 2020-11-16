@@ -10,7 +10,7 @@
   import Test from "./components/Test/Test.svelte";
   import download from "downloadjs";
   import Loader from "./Loader.svelte";
-  import Navaid from "navaid";
+  import Navaid from "./lib/navaid/";
   import { routeparams } from "./stores/Route";
   window.download = download;
   import {

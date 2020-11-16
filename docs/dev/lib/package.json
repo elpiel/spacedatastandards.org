@@ -1,0 +1,76 @@
+{
+  "_args": [
+    [
+      "git+ssh://git@github.com/DigitalArsenal/navaid.git",
+      "/home/tj/software/spacedatastandards.org/docs"
+    ]
+  ],
+  "_from": "git+ssh://git@github.com/DigitalArsenal/navaid.git",
+  "_id": "navaid@git+ssh://git@github.com/DigitalArsenal/navaid.git#34e3a461cf35a3a8a909f8128497cb3826cb5ac4",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/navaid",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "git+ssh://git@github.com/DigitalArsenal/navaid.git",
+    "rawSpec": "git+ssh://git@github.com/DigitalArsenal/navaid.git",
+    "saveSpec": "git+ssh://git@github.com/DigitalArsenal/navaid.git",
+    "fetchSpec": "ssh://git@github.com/DigitalArsenal/navaid.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git+ssh://git@github.com/DigitalArsenal/navaid.git#34e3a461cf35a3a8a909f8128497cb3826cb5ac4",
+  "_spec": "git+ssh://git@github.com/DigitalArsenal/navaid.git",
+  "_where": "/home/tj/software/spacedatastandards.org/docs",
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "bugs": {
+    "url": "https://github.com/lukeed/navaid/issues"
+  },
+  "dependencies": {
+    "regexparam": "^1.0.2"
+  },
+  "description": "A navigation aid (aka, router) for the browser in 865 bytes~!",
+  "devDependencies": {
+    "esm": "3.2.25",
+    "gzip-size": "5.1.1",
+    "mk-dirs": "^1.0.0",
+    "pretty-bytes": "5.3.0",
+    "tap-spec": "5.0.0",
+    "tape": "4.13.2",
+    "terser": "4.6.6"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/lukeed/navaid#readme",
+  "keywords": [
+    "browser",
+    "client-side",
+    "router"
+  ],
+  "license": "MIT",
+  "main": "dist/navaid.js",
+  "module": "dist/navaid.mjs",
+  "name": "navaid",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukeed/navaid.git"
+  },
+  "scripts": {
+    "build": "node builder",
+    "pretest": "npm run build",
+    "test": "tape -r esm test/*.js | tap-spec"
+  },
+  "unpkg": "dist/navaid.min.js",
+  "version": "1.1.0"
+}
