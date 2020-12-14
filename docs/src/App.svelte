@@ -7,10 +7,9 @@
   import Code from "./components/Code/Code.svelte";
   import Examples from "./components/Examples/Examples.svelte";
 
-  import Test from "./components/Test/Test.svelte";
   import download from "downloadjs";
   import Loader from "./Loader.svelte";
-  import Navaid from "./lib/navaid/";
+  import Navaid from "./lib/navaid/navaid.mjs";
   import { routeparams } from "./stores/Route";
   window.download = download;
   import {
@@ -373,14 +372,6 @@
       class:active={activeComponent === Examples}
       on:click={() => toggleMenu()}>
       EXAMPLES
-    </a>
-  </div>
-  <div>
-    <a
-      href="#/test"
-      class:active={activeComponent === Test}
-      on:click={() => toggleMenu()}>
-      TEST
     </a>
   </div>
   <div>
