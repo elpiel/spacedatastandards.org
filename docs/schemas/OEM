@@ -1,0 +1,69 @@
+enum timeSystem : byte {
+/// Greenwich Mean Sidereal Time
+GMST,
+/// Global Positioning System
+GPS,
+/// Mission Elapsed Time
+MET,
+/// Mission Relative Time
+MRT,
+/// Spacecraft Clock (receiver) (requires rules for interpretation in ICD)
+SCLK,
+/// International Atomic Time
+TAI,
+/// Barycentric Coordinate Time
+TCB,
+/// Barycentric Dynamical Time
+TDB,
+/// Geocentric Coordinate Time
+TCG,
+/// Terrestrial Time
+TT,
+/// Universal Time
+UT1,
+/// Coordinated Universal Time
+UTC
+}
+
+table OEM {
+// OMM Header
+CCSDS_OEM_VERS:double;
+CREATION_DATE:string;
+ORIGINATOR:string;
+
+// OMM Metadata
+OBJECT_NAME:string;
+OBJECT_ID:string;
+CENTER_NAME:string;
+REF_FRAME:referenceFrame = TEME;
+TIME_SYSTEM:timeSystem = UTC;
+MEAN_ELEMENT_THEORY:meanElementTheory = SGP4;
+START_TIME:string;
+USEABLE_START_TIME:string;
+USEABLE_STOP_TIME:string;
+STOP_TIME:string;
+
+INTERPOLATION:string;
+INTERPOLATION_DEGREE:uint;
+
+}
+
+table EPHEMERIS {
+EPOCH:double;
+X:double;
+Y:double;
+Z:double;
+X_DOT:double;
+Y_DOT:double;
+Z_DOT:double;
+X_DDOT:double;
+Y_DDOT:double;
+Z_DDOT:double;
+}
+
+table OEMCOLLECTION {
+RECORDS:[OEM];
+}
+
+root_type OEM;
+file_identifier "$OEM";
