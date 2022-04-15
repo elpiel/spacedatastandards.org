@@ -1,10 +1,6 @@
 
 # spacedatastandards.org
 
-**[CLICK HERE FOR THE EDITOR](https://spacedatastandards.org)**
-
-<img src="https://github.com/DigitalArsenal/spacedatastandards.org/raw/master/images/IDE.gif">
-
 <h2>
   Background
 </h2>
@@ -98,3 +94,8 @@
   </a>
   on this repository.
 </p>
+
+
+**[CLICK HERE FOR THE EDITOR](https://spacedatastandards.org)**
+
+<img src="https://github.com/DigitalArsenal/spacedatastandards.org/raw/master/images/IDE.gif">
