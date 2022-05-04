@@ -1,4 +1,4 @@
-# SDS-1 - Resident Space Object (RSO) Catalog Message (RSM)
+# Space Data Standard - 1 - Resident Space Object Catalog Message (RSM)
 
 
 ## Description
