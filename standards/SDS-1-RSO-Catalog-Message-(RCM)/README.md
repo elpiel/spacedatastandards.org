@@ -13,7 +13,7 @@ OBJECT_NAME|Satellite Name(s)|
 OBJECT_ID|International Designator (YYYY-NNNAAA)|
 NORAD_CAT_ID|NORAD Catalog Number|
 MULTIPLE_NAMES|Multiple Name Flag|
-OBJECT_TYPE|Object type (Payload, Rocket body, Debris, Unknown|
+OBJECT_TYPE|Object type (Payload, Rocket body, Debris, Unknown)|
 OPS_STATUS_CODE|Operational Status Code|
 OWNER|Ownership, typically country or company|
 LAUNCH_DATE|Launch Date [year-month-day] (ISO 8601)|
