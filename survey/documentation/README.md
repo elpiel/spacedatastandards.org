@@ -1,1 +1,1 @@
-# Location for all documentation related to the survey
+# Folder for all documentation related to the survey
