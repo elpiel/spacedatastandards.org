@@ -1,9 +1,9 @@
 # Legacy Format Descriptions
 
 1. [Two-Line Element Set](./tle/README.md)
-1. [Satellite Catalog](./satcat/README.md)
-1. [Vector Covariance Message](./vcm/README.md)
-
+2. [Satellite Catalog](./satcat/README.md)
+3. [Vector Covariance Message](./vcm/README.md)
+3. [Vector Ephemeris File (text)](./ephemeris/text/README.md)
 # Legacy Format Examples
 
 1. [Two-Line Element Set](./tle/sample/tle.txt), taken from [Celestrak](https://celestrak.com/NORAD/elements/active.txt)
