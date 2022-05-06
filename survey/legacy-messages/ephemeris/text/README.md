@@ -51,3 +51,6 @@ is in ECI TEME.
 |6|Ephemeris file type (1 = ECI or 3 = EFG)|
 |7|Ephemeris type|
 |8|File coordinate system (ECI or EFG)|
+
+
+### [Example File](./sample/00000.eci)

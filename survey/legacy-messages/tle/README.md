@@ -129,3 +129,5 @@ Lines 1 and 2 are the standard Two-Line Orbital Element Set Format identical to 
     <td>Checksum (Modulo 10)</td>
   </tr>
 </tbody></table>
+
+### [Example File](./sample/tle.txt)

@@ -204,3 +204,5 @@ solved for all 6 elements plus AGOM, the covariance matrix will be 9x9
 If the covariance
 matrix is unavailable, the size will be set to 0x0, and no data will
 follow. 
+
+### [Example File](./sample/vcm.txt)
