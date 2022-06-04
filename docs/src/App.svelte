@@ -2,7 +2,9 @@
   import logo from "./assets/svelte.png";
   import Counter from "./lib/Counter.svelte";
   import flatc from "./external/flatc.mjs";
-  console.log(flatc);
+  import { Octokit } from "@octokit/rest";
+  console.log(Octokit);
+  let results = "";
 
   flatc({
     noInitialRun: true,
@@ -198,7 +200,7 @@ file_identifier "$OMM";`
     m.main(["--help"]);
     m.main(["--jsonschema", "/OMM.module.fbs"]);
     console.log(m.FS.readdir("/"));
-    console.log(m.FS.readFile("/OMM.module.schema.json", e));
+    results = m.FS.readFile("/OMM.module.schema.json", e);
   });
 </script>
 
@@ -208,15 +210,7 @@ file_identifier "$OMM";`
 
   <Counter />
 
-  <p>
-    Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte
-    apps.
-  </p>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme">SvelteKit</a> for
-    the officially supported framework, also powered by Vite!
-  </p>
+  <textarea bind:value={results} />
 </main>
 
 <style>
