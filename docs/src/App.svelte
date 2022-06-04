@@ -2,7 +2,8 @@
   import logo from "./assets/svelte.png";
   import Counter from "./lib/Counter.svelte";
   import flatc from "./external/flatc.mjs";
-  import { Octokit } from "@octokit/rest";
+  import "./index.css";
+  import { Octokit, App } from "octokit/dist-web/index";
   console.log(Octokit);
   let results = "";
 
@@ -204,13 +205,13 @@ file_identifier "$OMM";`
   });
 </script>
 
-<main>
+<main class="flex flex-col gap-2 items-center justify-center">
   <img src={logo} alt="Svelte Logo" />
   <h1>Hello Typescript!</h1>
 
   <Counter />
 
-  <textarea bind:value={results} />
+  <textarea class="border p-2 rounded h-32 w-1/2" bind:value={results} />
 </main>
 
 <style>
@@ -240,18 +241,8 @@ file_identifier "$OMM";`
     max-width: 14rem;
   }
 
-  p {
-    max-width: 14rem;
-    margin: 1rem auto;
-    line-height: 1.35;
-  }
-
   @media (min-width: 480px) {
     h1 {
-      max-width: none;
-    }
-
-    p {
       max-width: none;
     }
   }
