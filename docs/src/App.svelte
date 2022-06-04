@@ -1,414 +1,264 @@
-<script>
-  import { onMount, onDestroy } from "svelte";
-  import { onLoad } from "./lib/global.js";
-  import Main from "./components/Main/Main.svelte";
-  import Select from "./components/Select/Select.svelte";
-  import Editor from "./components/MonacoEditor/MonacoEditor.svelte";
-  import Code from "./components/Code/Code.svelte";
-  import Examples from "./components/Examples/Examples.svelte";
+<script lang="ts">
+  import logo from "./assets/svelte.png";
+  import Counter from "./lib/Counter.svelte";
+  import flatc from "./external/flatc.mjs";
+  console.log(flatc);
 
-  import download from "downloadjs";
-  import Loader from "./Loader.svelte";
-  import Navaid from "./lib/navaid/navaid.mjs";
-  import { routeparams } from "./stores/Route";
-  window.download = download;
-  import {
-    manifest,
-    IDLDocument,
-    IDLEditorContents,
-    CodeEditorActiveDocument,
-    CodeEditorContents,
-    CodeEditorLanguage,
-    TestEditorDocument,
-    TestEditorContents,
-    saveEventTime,
-    loadFile,
-  } from "./stores/Files.js";
+  flatc({
+    noInitialRun: true,
+  }).then((m) => {
+    let e = { encoding: "utf8" };
+    m.FS.writeFile(
+      "/OMM.module.fbs",
+      `enum referenceFrame : byte {
+/// Earth Mean Equator and Equinox of J2000
+EME2000,
+///  Geocentric Celestial Reference Frame
+GCRF,
+/// Greenwich Rotating Coordinates
+GRC,
+/// International Celestial Reference Frame
+ICRF,
+/// International Terrestrial Reference Frame 2000
+ITRF2000,
+/// International Terrestrial Reference Frame 1993
+ITRF93, 
+/// International Terrestrial Reference Frame 1997
+ITRF97,
+/// Mars Centered Inertial
+MCI,
+/// True of Date, Rotating
+TDR,
+/// True Equator Mean Equinox
+TEME,
+/// True of Date
+TOD, 
+}
 
-  let menuOpen = false;
-  let loaded = false;
-  let editor = null;
+enum ephemerisType : byte {
+ /// Simplified General Perturbation Model 
+ SGP,
+ /// Simplified General Perturbation Model  4
+ SGP4,
+ /// Simplified Deep Space Perturbation Model 4 
+ SDP4,
+ /// Simplified General Perturbation Model 8
+ SGP8,
+ /// Simplified Deep Space Perturbation Model 8
+ SDP8,
+ /// SGP4-XP
+ SGP4XP
+}
 
-  let args = {};
-  const githubURL = "https://github.com/DigitalArsenal/spacedatastandards.org";
-  $: link = `https://public.ccsds.org/Pubs/${($IDLDocument || "").match(
-    /\w{1,}/
-  )}.pdf`;
+enum timeSystem : byte {
+  /// Greenwich Mean Sidereal Time
+  GMST,
+  /// Global Positioning System
+  GPS,
+  /// Mission Elapsed Time
+  MET,
+  /// Mission Relative Time
+  MRT,
+  /// Spacecraft Clock (receiver) (requires rules for interpretation in ICD)
+  SCLK,
+  /// International Atomic Time
+  TAI,
+  /// Barycentric Coordinate Time
+  TCB,
+  /// Barycentric Dynamical Time
+  TDB,
+  /// Geocentric Coordinate Time
+  TCG,
+  /// Terrestrial Time
+  TT,
+  /// Universal Time
+  UT1,
+  /// Coordinated Universal Time 
+  UTC
+}
 
-  const setRoute = (_params, _component) => {
-    $routeparams = _params;
-    activeComponent = _component;
-  };
-  $: linkName = ($IDLDocument || "").match(/\w{1,}/);
+enum meanElementTheory : byte {
+  /// Simplified General Perturbation Model  4
+  SGP4,
+  /// Draper Semi-analytical Satellite Theory
+  DSST,
+  /// Universal Semianalytical Method
+  USM
+}
 
-  let activeComponent = Editor;
+enum manCovRefFrame : byte {
+  // Another name for ‘Radial, Transverse, Normal’
+  RSW,
+  // Radial, Transverse, Normal
+  RTN,
+  // A local orbital coordinate frame (x velocity vec., w orbital angular momentum vec., N completes right handed system.)
+  TNW
+}
 
-  let defaultPath = (params) => {
-    setRoute(params, Main);
-  };
+table OMM {
+  // OMM Header
+  CCSDS_OMM_VERS:double;
+  CREATION_DATE:string;
+  ORIGINATOR:string;
 
-  let router = new Navaid("/", defaultPath);
+  // OMM Metadata
+  OBJECT_NAME:string;
+  OBJECT_ID:string;
+  CENTER_NAME:string;
+  REF_FRAME:referenceFrame = TEME;
+  REF_FRAME_EPOCH:string;
+  TIME_SYSTEM:timeSystem = UTC;
+  MEAN_ELEMENT_THEORY:meanElementTheory = SGP4;
 
-  router.on("/", defaultPath);
-  router.on("/#/", defaultPath);
-  router.on("/#/select", (params) => {
-    args = {};
-    setRoute(params, Select);
-  });
-  router.on("/#/idl", (params) => {
-    args = {
-      documentName: IDLDocument,
-      editorContents: IDLEditorContents,
-      language: "flatbuffers",
-      theme: "flatbuffers",
-      _class: "editor1",
-    };
-    setRoute(params, Editor);
-  });
+  // Mean Keplerian Elements in the Specified Reference Frame
+  COMMENT:string;
+  EPOCH:string;
+  SEMI_MAJOR_AXIS:double;
+  MEAN_MOTION:double;
+  ECCENTRICITY:double;
+  INCLINATION:double;
+  RA_OF_ASC_NODE:double;
+  ARG_OF_PERICENTER:double;
+  MEAN_ANOMALY:double;
+  GM:double;
+  
+  // Spacecraft Parameters
+  MASS:double;
+  SOLAR_RAD_AREA:double;
+  SOLAR_RAD_COEFF:double;
+  DRAG_AREA:double;
+  DRAG_COEFF:double;
 
-  router.on("/#/code", (params) => {
-    args = {
-      documentName: CodeEditorActiveDocument,
-      editorContents: CodeEditorContents,
-      language: "",
-      theme: "",
-      _class: "editor1",
-      readOnly: true,
-    };
-    setRoute(params, Code);
-  });
-  router.on("/#/examples.*", (params) => {
-    args = {
-      documentName: "",
-      editorContents: "",
-      language: "",
-      theme: "",
-      _class: "editor1",
-      readOnly: true,
-    };
-    setRoute(params, Examples);
-  });
-  router.on("/#/test", (params) => {
-    args = {
-      documentName: TestEditorDocument,
-      editorContents: TestEditorContents,
-      language: "",
-      theme: "",
-      _class: "editor1",
-      readOnly: true,
-    };
-    setRoute(params, Test);
-  });
+  // TLE Related Parameters (This section is only required if MEAN_ELEMENT_THEORY=SGP/SGP4)
+  EPHEMERIS_TYPE:ephemerisType = SGP4;
+  CLASSIFICATION_TYPE:string;
+  NORAD_CAT_ID:uint32;
+  ELEMENT_SET_NO:uint32;
+  REV_AT_EPOCH:double;
+  BSTAR:double;
+  MEAN_MOTION_DOT:double;
+  MEAN_MOTION_DDOT:double;
+  
+  // Position/Velocity Covariance Matrix (6x6 Lower Triangular Form. None or all parameters of the matrix must be given.
+  // COV_REF_FRAME may be omitted if it is the same as the metadata REF_FRAME.) 
+  COV_REF_FRAME:manCovRefFrame = RSW;
+  CX_X:double;
+  CY_X:double;
+  CY_Y:double;
+  CZ_X:double;
+  CZ_Y:double;
+  CZ_Z:double;
+  CX_DOT_X:double;
+  CX_DOT_Y:double;
+  CX_DOT_Z:double;
+  CX_DOT_X_DOT:double;
+  CY_DOT_X:double;
+  CY_DOT_Y:double;
+  CY_DOT_Z:double;
+  CY_DOT_X_DOT:double;
+  CY_DOT_Y_DOT:double;
+  CZ_DOT_X:double;
+  CZ_DOT_Y:double;
+  CZ_DOT_Z:double;
+  CZ_DOT_X_DOT:double;
+  CZ_DOT_Y_DOT:double;
+  CZ_DOT_Z_DOT:double;
 
-  router.listen();
+  // User Defined Parameters (all parameters in this section must be described in an ICD). 
+  USER_DEFINED_BIP_0044_TYPE:uint;
+  USER_DEFINED_OBJECT_DESIGNATOR:string;
+  USER_DEFINED_EARTH_MODEL:string;
+  USER_DEFINED_EPOCH_TIMESTAMP: double;
+  USER_DEFINED_MICROSECONDS: double;
+}
 
-  const toggleMenu = (value) => {
-    menuOpen = value !== undefined ? value : !menuOpen;
-    let posVal = menuOpen
-      ? window.innerWidth > 1024
-        ? "200px"
-        : "30vw"
-      : "0vw";
-    document.documentElement.style.setProperty("--container-position", posVal);
-  };
+table mpe {
+  MEAN_MOTION:double;
+  ECCENTRICITY:double;
+  INCLINATION:double;
+  RA_OF_ASC_NODE:double;
+  ARG_OF_PERICENTER:double;
+  MEAN_ANOMALY:double;
+  NORAD_CAT_ID:uint32;
+  BSTAR:double;
+  USER_DEFINED_EPOCH_TIMESTAMP: double;
+}
 
-  function createDownload() {
-    let dL = [];
-    if (activeComponent === Editor) {
-      dL = [$IDLEditorContents, $IDLDocument];
-    } else if (activeComponent === Code) {
-      dL = [$CodeEditorContents, $CodeEditorActiveDocument];
-    } else if (activeComponent === Test) {
-      dL = [$TestEditorContents, $TestEditorDocument];
-    }
-    download(dL[0], dL[1], "text/plain");
-  }
+table OMMcollection {
+  RECORDS:[OMM];
+}
 
-  const sEvent = (event) => {
-    if (event.which == 83 && event.ctrlKey) {
-      event.preventDefault();
-      $saveEventTime = new Date();
-    }
-  };
+table mpecollection {
+  RECORDS:[mpe];
+}
 
-  onMount(async () => {
-    window.addEventListener("keydown", sEvent);
-    if (!$IDLEditorContents) {
-      let loaded = await loadFile($manifest.files[0].filename, $manifest, true);
-    }
-  });
-  onDestroy(() => {
-    window.removeEventListener("keydown", sEvent);
+root_type OMM;
+file_identifier "$OMM";`
+    );
+    m.main(["--help"]);
+    m.main(["--jsonschema", "/OMM.module.fbs"]);
+    console.log(m.FS.readdir("/"));
+    console.log(m.FS.readFile("/OMM.module.schema.json", e));
   });
 </script>
 
+<main>
+  <img src={logo} alt="Svelte Logo" />
+  <h1>Hello Typescript!</h1>
+
+  <Counter />
+
+  <p>
+    Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte
+    apps.
+  </p>
+
+  <p>
+    Check out <a href="https://github.com/sveltejs/kit#readme">SvelteKit</a> for
+    the officially supported framework, also powered by Vite!
+  </p>
+</main>
+
 <style>
-  :global(:root) {
-    --font-size-sm: calc(
-      minmax((0.85rem + 0.5 * ((100vw - 50rem) / 120)), 12px)
-    );
-    --font-size-btn: calc((1.5rem + 0.5 * ((100vw - 50rem) / 120)));
-    --font-size-header: calc((1rem + 0.5 * ((100vw - 80rem) / 120)));
-    --celestrak-blue: #1e5cad;
-    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-    --header-height: 50px;
-    --container-position: 0px;
-    --header-gradient: linear-gradient(
-      to bottom,
-      var(--celestrak-blue) 20%,
-      #2963af 50%,
-      var(--celestrak-blue) 80%
-    );
-    --button-gradient: linear-gradient(
-      to right,
-      var(--celestrak-blue) 0%,
-      #2b66b3 50%,
-      var(--celestrak-blue) 100%
-    );
-  }
-  :global(.editor1) {
-    height: calc(99.99vh - var(--header-height));
-  }
-  :global(html, body) {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: fixed;
-  }
-
-  :global(body) {
-    /*overflow: hidden;*/
-
-    padding-bottom: 20px;
-    background: #164583;
-    color: #333;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: var(--font-family);
-  }
-  :global(div) {
-    box-sizing: border-box;
-    user-select: none;
+  :root {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   }
 
   main {
+    text-align: center;
+    padding: 1em;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 100vw;
   }
 
-  header {
-    background: var(--header-gradient);
-    color: white;
-    padding: 2px;
-    box-sizing: border-box;
-    margin-bottom: 1px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  img {
+    height: 16rem;
+    width: 16rem;
   }
 
-  container {
-    display: grid;
-    grid-template-rows: var(--header-height) auto;
-    height: 100vh;
-    width: 100vw;
-    box-sizing: border-box;
-    overflow: hidden;
-    position: relative;
-    left: var(--container-position);
-    transition: all 0.1s;
-    background: white;
-    box-shadow: -5px 2px 6px 7px #00000044;
+  h1 {
+    color: #ff3e00;
+    text-transform: uppercase;
+    font-size: 4rem;
+    font-weight: 100;
+    line-height: 1.1;
+    margin: 2rem auto;
+    max-width: 14rem;
   }
-  @media (min-width: 640px) {
-    main {
+
+  p {
+    max-width: 14rem;
+    margin: 1rem auto;
+    line-height: 1.35;
+  }
+
+  @media (min-width: 480px) {
+    h1 {
       max-width: none;
-      z-index: 1;
-      background: white;
+    }
+
+    p {
+      max-width: none;
     }
   }
-
-  #mainContainer {
-    width: 100%;
-  }
-  #links {
-    box-sizing: border-box;
-    display: grid;
-    grid-gap: 4px;
-    grid-template-columns: auto;
-    font-size: var(--font-size-header);
-    padding-right: 10px;
-  }
-  #links a,
-  header a,
-  menu a {
-    color: #fff;
-    font-weight: 300;
-    text-decoration: none;
-    cursor: pointer;
-    border: 0.5px #ccc solid;
-    padding: 5px;
-  }
-
-  #menuButton {
-    color: #eee;
-    padding-left: 10px;
-    display: flex;
-    cursor: pointer;
-    font-size: 30px;
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    left: 0px;
-  }
-
-  menu a {
-    border: none;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  menu {
-    position: fixed;
-    left: -100%;
-    padding: 0px;
-    width: var(--container-position);
-    height: 100vh;
-    background: #164583;
-
-    margin: 0px;
-  }
-  menu.navActive {
-    left: 0px;
-  }
-  menu div {
-    height: var(--header-height);
-    border-bottom: 1px #aaa solid;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    color: #eee;
-    background: #164583;
-  }
-  menu div:hover {
-    background: #1a529b;
-  }
-  #links {
-    position: absolute;
-    right: 0px;
-  }
-  #links a:hover,
-  #links a.active {
-    background: #eee;
-    color: #333;
-  }
-
-  #mainHeader span {
-    font-size: var(--font-size-header);
-    display: flex;
-  }
 </style>
-
-<svelte:head>
-  <link
-    rel="prefetch"
-    href="/workers/worker.js"
-    as="worker"
-    type="text/javascript" />
-  <link
-    rel="prefetch"
-    href="https://cdn.digitalarsenal.io/lib/flatbuffers.js"
-    as="worker"
-    type="text/javascript" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0,
-    user-scalable=no, viewport-fit=contain" />
-</svelte:head>
-<svelte:options accessors={true} />
-<menu class:navActive={menuOpen}>
-  <div>
-    <a
-      href="#/"
-      class:active={activeComponent === Main}
-      on:click={() => toggleMenu()}>
-      HOME
-    </a>
-  </div>
-  <div>
-    <a
-      href="#/select"
-      class:active={activeComponent === Main}
-      on:click={() => toggleMenu()}>
-      SELECT
-    </a>
-  </div>
-  <div>
-    <a
-      href="#/idl"
-      class:active={activeComponent === Editor}
-      on:click={() => toggleMenu()}>
-      IDL
-    </a>
-  </div>
-  <div>
-    <a
-      href="#/code"
-      class:active={activeComponent === Code}
-      on:click={() => toggleMenu()}>
-      CODE
-    </a>
-  </div>
-  <div>
-    <a
-      href="#/examples"
-      class:active={activeComponent === Examples}
-      on:click={() => toggleMenu()}>
-      EXAMPLES
-    </a>
-  </div>
-  <div>
-    <a target="_blank" href={githubURL} class:active={activeComponent === Main}>
-      GITHUB
-    </a>
-  </div>
-</menu>
-<container>
-  <header>
-    <div id="menuButton" on:click={() => toggleMenu()}><span>☰</span></div>
-    <div id="mainHeader">
-      <span>
-        <a style="border:none" target="_blank" href={githubURL}>
-          SPACEDATASTANDARDS.ORG
-        </a>
-      </span>
-    </div>
-    <div id="links">
-      {#if $IDLDocument}
-        <a target="_blank" href={link} on:click={() => toggleMenu()}>
-          {linkName}
-        </a>
-      {:else}<a href="#/select">SELECT...</a>{/if}
-    </div>
-  </header>
-  <main>
-    {#if !loaded}
-      <Loader />
-    {/if}
-
-    <div id="mainContainer">
-      <svelte:component
-        this={activeComponent}
-        bind:loaded
-        {args}
-        {toggleMenu} />
-    </div>
-  </main>
-</container>
