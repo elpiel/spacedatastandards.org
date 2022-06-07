@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as CodeMirror from 'codemirror';
 
 var verbose = 0
@@ -270,7 +271,8 @@ function GrammarMode(graph, options) {
   this.State = stateClass(graph, options || {})
   this.mcx = new MatchContext
 }
-CodeMirror.GrammarMode = GrammarMode
+
+Object.assign(CodeMirror, { GrammarMode });
 
 GrammarMode.prototype.startState = function () { return this.State.start() }
 
