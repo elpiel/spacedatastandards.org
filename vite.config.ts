@@ -3,6 +3,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte"
 import * as path from "path";
 import viteCompression from "vite-plugin-compression";
 
+
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
@@ -18,7 +19,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: '../docs',
+    outDir: './docs',
     minify: "terser"
   }
 })

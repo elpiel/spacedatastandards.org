@@ -3,14 +3,15 @@
   import CodeMirror from "codemirror";
   import { editorContent } from "../stores/editor";
   //import "codemirror/mode/javascript/javascript";
-  import "@/external/google-modes/flatbuffers.js";
+  import addFlatbufferMode from "@/external/google-modes/flatbuffers.js";
   import { onDestroy, onMount } from "svelte";
   let codeMirrorInstance;
   let id = "cm-editor-21394595934509";
 
+  addFlatbufferMode(CodeMirror);
+
   $: {
     if ($editorContent && codeMirrorInstance) {
-      console.log($editorContent)
       codeMirrorInstance.setValue($editorContent);
     }
   }
@@ -21,7 +22,6 @@
       mode: "flatbuffers",
       lineNumbers: true,
     });
-    console.log(codeMirrorInstance);
   });
   onDestroy(() => {
     codeMirrorInstance.de;

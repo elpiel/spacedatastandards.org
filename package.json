@@ -6,12 +6,13 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && cp -R standards docs/standards",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "deploy": "npm run build && git add -A && git commit -m 'deploy' && git push"
   },
   "devDependencies": {
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
     "@tsconfig/svelte": "^2.0.1",
     "autoprefixer": "^10.4.7",
@@ -26,11 +27,10 @@
     "vite-plugin-compression": "^0.5.1"
   },
   "dependencies": {
+    "@octokit/rest": "^18.12.0",
     "codemirror": "^5.65.5",
     "codemirror-grammar-mode": "^0.1.10",
     "isomorphic-fetch": "^3.0.0",
-    "octo": "^0.1.0",
-    "octokit": "^1.7.1",
     "svelte-spa-router": "^3.2.0"
   }
 }
