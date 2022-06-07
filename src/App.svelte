@@ -5,6 +5,7 @@
   import { onMount } from "svelte";
   import CodeMirror from "./lib/CodeMirror.svelte";
   let results = "";
+  import { Octokit } from "https://cdn.skypack.dev/@octokit/rest";
   import SideBar from "@/lib/SideBar.svelte";
   import TopBar from "@/lib/TopBar.svelte";
   import SubBar from "@/lib/SubTopBar.svelte";
@@ -20,7 +21,14 @@
     results = m.FS.readFile("/OMM.module.schema.json", e);
   });
   onMount(async () => {
-   
+    let octokit = new Octokit();
+    let { data } = await octokit.rest.repos.getContent({
+      owner: "digitalarsenal",
+      repo: "spacedatastandards.org",
+      path: "standards",
+    });
+
+    console.log(data);
   });
 </script>
 
