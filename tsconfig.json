@@ -8,7 +8,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "src/*"
+        "src/*",
+      ],
+      "https://cdn.skypack.dev/*": [
+        "./node_modules/@types/*"
       ]
     },
     /**

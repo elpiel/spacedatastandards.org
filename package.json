@@ -16,6 +16,7 @@
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
     "@tsconfig/svelte": "^2.0.1",
     "autoprefixer": "^10.4.7",
+    "node-sass": "^7.0.1",
     "postcss": "^8.4.14",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.7",
@@ -28,9 +29,11 @@
   },
   "dependencies": {
     "@octokit/rest": "^18.12.0",
+    "@octokit/webhooks": "^9.24.0",
     "codemirror": "^5.65.5",
     "codemirror-grammar-mode": "^0.1.10",
     "isomorphic-fetch": "^3.0.0",
+    "localforage": "^1.10.0",
     "svelte-spa-router": "^3.2.0"
   }
 }
