@@ -4,11 +4,33 @@
     import type { PackageFile } from "@/classes/package_file";
     import type { RepoData } from "@/classes/repo_data";
     import { subMenu } from "@/stores/routes";
-    import { octokit, ownerObject, standards, sTimeout } from "@/stores/data";
+    import {
+        getStandards,
+        octokit,
+        ownerObject,
+        standards,
+        sTimeout,
+    } from "@/stores/data";
     import type { OctokitResponse } from "@octokit/types";
     import { onMount } from "svelte";
     import localForage from "localforage";
-    import { push } from "svelte-spa-router";
+    import { push, location } from "svelte-spa-router";
+    import CodeMirror from "../CodeMirror.svelte";
+    //@ts-ignore
+    import flatc from "@/external/flatc.mjs";
+    let results = "";
+
+    const getCode = async () => {
+        flatc({
+            noInitialRun: true,
+        }).then((m) => {
+            let e = { encoding: "utf8" };
+            m.FS.writeFile("/main.fbs", repoData.IDL);
+            m.main(["--jsonschema", "/main.fbs"]);
+            console.log(m.FS.readdir("/"));
+            results = m.FS.readFile("/main.schema.json", e);
+        });
+    };
 
     export let currentStandard: PackageFile;
     export let params: any = {};
@@ -42,20 +64,30 @@
     };
 
     onMount(async () => {
-        let _repoData: any = await localForage.getItem(currentStandard.name);
+        if (!currentStandard) {
+            await getStandards();
+            currentStandard = $standards.find((s) => s.name === params?.name);
+        }
+        if (!currentStandard?.name) {
+            push("/Standards");
+            return;
+        }
+        let _repoData: any = await localForage.getItem(params?.name);
         let last: any = await localForage.getItem(timeStampKey);
         if (
-            !_repoData?.readMe?.length ||
+            (false && !_repoData?.readMe?.length) ||
             !_repoData?.IDL?.length ||
             !last ||
             Date.now() > sTimeout + last
         ) {
             let error;
-            let results = Promise.all([
+            let results = await Promise.all([
                 getFile(`/standards/${currentStandard.name}/README.md`),
                 getFile(`/standards/${currentStandard.name}/main.fbs`),
-            ]);
-
+            ]).catch((e) => {
+                error = error;
+            });
+            if (error) return;
             repoData.readMe = results[0];
             repoData.IDL = results[1];
 
@@ -63,6 +95,7 @@
         } else {
             repoData = _repoData;
         }
+        getCode();
     });
 </script>
 
@@ -72,13 +105,16 @@
             <TopBar title={currentStandard?.name} />
         </div>
         <div><SubBar /></div>
-        <div class="bg-gray-200 h-full p-6 text-gray-700 overflow-y-auto">
+        <div class="relative bg-gray-200 h-full text-gray-700 overflow-y-auto">
             {#if $subMenu === 0}
                 <div class="readMeWrapper">{@html repoData.readMe}</div>
             {:else if $subMenu === 1}
-                <div>b</div>
+                <div class="relative border h-full">
+                    <div />
+                    <CodeMirror readOnly={true} content={repoData.IDL} />
+                </div>
             {:else if $subMenu === 2}
-                {currentStandard.name}
+                <CodeMirror readOnly={true} content={results} />
             {/if}
         </div>
     </div>
@@ -86,7 +122,7 @@
 
 <style lang="postcss">
     .readMeWrapper {
-        @apply text-sm;
+        @apply text-sm p-6;
     }
 
     .readMeWrapper > :global(h1) {

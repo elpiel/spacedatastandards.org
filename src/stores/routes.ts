@@ -9,7 +9,7 @@ export const routes = {
     // Exact path
     "/": Home,
     "/Standards": Standards,
-    "/Standard/:name?": Standard
+    "/Standard/:name?/:subpage?": Standard
 };
 
 export const subMenu: Writable<number> = writable(0)

@@ -6,26 +6,27 @@
   import addFlatbufferMode from "@/external/google-modes/flatbuffers.js";
   import { onDestroy, onMount } from "svelte";
   let codeMirrorInstance;
+  export let readOnly = false;
   let id = "cm-editor-21394595934509";
 
   addFlatbufferMode(CodeMirror);
-
+  export let content;
   $: {
     if ($editorContent && codeMirrorInstance) {
-      codeMirrorInstance.setValue($editorContent);
+      codeMirrorInstance.setValue(content);
     }
   }
 
   onMount(() => {
+    console.log(readOnly);
     codeMirrorInstance = CodeMirror(document.getElementById(id), {
       value: "",
       mode: "flatbuffers",
       lineNumbers: true,
+      readOnly,
     });
-  });
-  onDestroy(() => {
-    codeMirrorInstance.de;
+    codeMirrorInstance.setSize("100%", "100%");
   });
 </script>
 
-<div {id} />
+<div class="w-full h-full" {id} />
