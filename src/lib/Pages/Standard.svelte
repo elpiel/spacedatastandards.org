@@ -2,6 +2,7 @@
     import TopBar from "@/lib/TopBar.svelte";
     import SubBar from "@/lib/SubTopBar.svelte";
     import type { PackageFile } from "@/classes/package_file";
+    import type { RepoData } from "@/classes/repo_data";
     import { subMenu } from "@/stores/routes";
     import { octokit, ownerObject, standards, sTimeout } from "@/stores/data";
     import type { OctokitResponse } from "@octokit/types";
@@ -34,10 +35,12 @@
         push("/Standards");
     }
     let timeStampKey = `${currentStandard}:timestamp`;
-    let repoData: any = {
+
+    let repoData: RepoData = {
         readMe: "",
         IDL: "",
     };
+
     onMount(async () => {
         let _repoData: any = await localForage.getItem(currentStandard.name);
         let last: any = await localForage.getItem(timeStampKey);
@@ -47,12 +50,15 @@
             !last ||
             Date.now() > sTimeout + last
         ) {
-            repoData.readMe = await getFile(
-                `/standards/${currentStandard.name}/README.md`
-            );
-            repoData.IDL = await getFile(
-                `/standards/${currentStandard.name}/main.fbs`
-            );
+            let error;
+            let results = Promise.all([
+                getFile(`/standards/${currentStandard.name}/README.md`),
+                getFile(`/standards/${currentStandard.name}/main.fbs`),
+            ]);
+
+            repoData.readMe = results[0];
+            repoData.IDL = results[1];
+
             localForage.setItem(currentStandard.name, repoData);
         } else {
             repoData = _repoData;
