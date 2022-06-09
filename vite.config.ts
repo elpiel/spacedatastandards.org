@@ -6,7 +6,7 @@ import { viteSingleFile } from "vite-plugin-singlefile"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svelte(), viteCompression(), viteSingleFile()],
+  plugins: [svelte(), viteCompression()],
   resolve: {
     alias: {
       "node-fetch": "isomorphic-fetch",
