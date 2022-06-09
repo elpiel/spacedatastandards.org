@@ -1,7 +1,6 @@
 <script lang="ts">
   import "codemirror/lib/codemirror.css";
   import CodeMirror from "codemirror";
-  import { editorContent } from "../stores/editor";
   //import "codemirror/mode/javascript/javascript";
   import addFlatbufferMode from "@/external/google-modes/flatbuffers.js";
   import { onDestroy, onMount } from "svelte";
@@ -11,8 +10,9 @@
 
   addFlatbufferMode(CodeMirror);
   export let content;
+
   $: {
-    if ($editorContent && codeMirrorInstance) {
+    if (content && codeMirrorInstance) {
       codeMirrorInstance.setValue(content);
     }
   }

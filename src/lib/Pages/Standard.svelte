@@ -95,6 +95,7 @@
         } else {
             repoData = _repoData;
         }
+        console.log(repoData)
         getCode();
     });
 </script>
