@@ -30,6 +30,7 @@
         IDL: "",
     };
     let currentEditorFileContents = "";
+
     $: {
         if ($currentEditorFile && mFS) {
             currentEditorFileContents = mFS.readFile(
@@ -112,7 +113,7 @@
         <div class="h-16 border bg-gray-100 text-gray-500 text-xl">
             <TopBar title={currentStandard?.name} />
         </div>
-        <div><SubBar /></div>
+        <div><SubBar {currentStandard} /></div>
         <div class="relative bg-gray-200 h-full text-gray-700 overflow-y-auto">
             {#if $subMenu === 0}
                 <div class="readMeWrapper">{@html repoData.readMe}</div>

@@ -2,18 +2,25 @@
     import { subMenu } from "@/stores/routes";
     import { Icon } from "svelte-awesome";
     import { download, language } from "svelte-awesome/icons";
+    import { mFS, en } from "@/stores/data";
+    import JSZip from "jszip";
+    import { saveAs } from "file-saver";
+
+    export let currentStandard: PackageFile;
+
     import {
         languages,
         currentEditorLanguage,
         currentEditorFile,
         totalFiles,
     } from "@/stores/editor";
+    import type { PackageFile } from "@/classes/package_file";
+
     const subMenus = [
         { name: "Description" },
         { name: "IDL (Schema)" },
         { name: "Code" },
     ];
-
 </script>
 
 <div
@@ -57,6 +64,22 @@
                     </select>
                 </div>
                 <div
+                    on:click={(e) => {
+                        if (mFS) {
+                            let zip = new JSZip();
+                            $totalFiles.forEach((file) => {
+                                zip.file(file, mFS.readFile("/" + file, en));
+                            });
+                            zip.generateAsync({ type: "blob" }).then(function (
+                                content
+                            ) {
+                                saveAs(
+                                    content,
+                                    `${currentStandard?.name}-${languages[$currentEditorLanguage][1]}.zip`
+                                );
+                            });
+                        }
+                    }}
                     class="cursor-pointer flex border items-center gap-1 text-xs p-1 bg-blue-600 text-white"
                 >
                     <Icon data={download} />Download
