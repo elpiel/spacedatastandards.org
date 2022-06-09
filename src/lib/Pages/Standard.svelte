@@ -3,7 +3,7 @@
     import SubBar from "@/lib/SubTopBar.svelte";
     import type { PackageFile } from "@/classes/package_file";
     import { subMenu } from "@/stores/routes";
-    import { octokit, ownerObject, standards } from "@/stores/data";
+    import { octokit, ownerObject, standards, sTimeout } from "@/stores/data";
     import { onMount } from "svelte";
     import localForage from "localforage";
     import { push } from "svelte-spa-router";
@@ -12,19 +12,25 @@
     export let params: any = {};
     if (params.name) {
         currentStandard = $standards.find((s) => {
-            console.log(s);
             return s.name === params.name;
         });
     } else {
         push("/Standards");
     }
+    let timeStampKey = `${currentStandard}:timestamp`;
     let repoData: any = {
         readMe: "",
         IDL: "",
     };
     onMount(async () => {
         let _repoData: any = await localForage.getItem(currentStandard.name);
-        if (!_repoData?.readMe?.length) {
+        let last: any = await localForage.getItem(timeStampKey);
+
+        if (
+            !_repoData?.readMe?.length ||
+            !last ||
+            Date.now() > sTimeout + last
+        ) {
             repoData.readMe = atob(
                 (
                     await octokit.rest.repos.getContent({

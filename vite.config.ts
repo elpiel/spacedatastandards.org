@@ -6,11 +6,6 @@ import viteCompression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  define: {
-    global: {
-      CodeMirror: "CodeMirror"
-    }
-  },
   plugins: [svelte(), viteCompression()],
   resolve: {
     alias: {
