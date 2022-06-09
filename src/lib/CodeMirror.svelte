@@ -18,7 +18,6 @@
   }
 
   onMount(() => {
-    console.log(readOnly);
     codeMirrorInstance = CodeMirror(document.getElementById(id), {
       value: "",
       mode: "flatbuffers",

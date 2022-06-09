@@ -1,12 +1,19 @@
 <script lang="ts">
     import { subMenu } from "@/stores/routes";
     import { Icon } from "svelte-awesome";
-    import { download } from "svelte-awesome/icons";
+    import { download, language } from "svelte-awesome/icons";
+    import {
+        languages,
+        currentEditorLanguage,
+        currentEditorFile,
+        totalFiles,
+    } from "@/stores/editor";
     const subMenus = [
         { name: "Description" },
         { name: "IDL (Schema)" },
         { name: "Code" },
     ];
+
 </script>
 
 <div
@@ -30,9 +37,24 @@
         <div>
             <div class="flex gap-2 text-xs">
                 <div>
-                    <select class="p-1 border cursor-pointer"
-                        ><option>Test</option></select
+                    <select
+                        class="p-1 border cursor-pointer"
+                        bind:value={$currentEditorFile}
                     >
+                        {#each $totalFiles as file, f}
+                            <option value={file}>{file}</option>
+                        {/each}
+                    </select>
+                </div>
+                <div>
+                    <select
+                        class="p-1 border cursor-pointer"
+                        bind:value={$currentEditorLanguage}
+                    >
+                        {#each languages as language, l}
+                            <option value={l}>{language[1]}</option>
+                        {/each}
+                    </select>
                 </div>
                 <div
                     class="cursor-pointer flex border items-center gap-1 text-xs p-1 bg-blue-600 text-white"

@@ -5,6 +5,12 @@
     import type { RepoData } from "@/classes/repo_data";
     import { subMenu } from "@/stores/routes";
     import {
+        currentEditorFile,
+        currentEditorLanguage,
+        languages,
+        totalFiles,
+    } from "@/stores/editor";
+    import {
         getStandards,
         octokit,
         ownerObject,
@@ -14,23 +20,53 @@
     import type { OctokitResponse } from "@octokit/types";
     import { onMount } from "svelte";
     import localForage from "localforage";
-    import { push, location } from "svelte-spa-router";
+    import { push } from "svelte-spa-router";
     import CodeMirror from "../CodeMirror.svelte";
     //@ts-ignore
     import flatc from "@/external/flatc.mjs";
-    let results = "";
 
+    let mFS: any;
+    let en = { encoding: "utf8" };
     const getCode = async () => {
+        console.log(repoData.IDL);
+        console.log(languages[$currentEditorLanguage][0]);
+        if (!repoData?.IDL) return;
         flatc({
             noInitialRun: true,
         }).then((m) => {
-            let e = { encoding: "utf8" };
+            mFS = m.FS;
+
+            console.log(repoData.IDL);
+            console.log(languages[$currentEditorLanguage][0]);
             m.FS.writeFile("/main.fbs", repoData.IDL);
-            m.main(["--jsonschema", "/main.fbs"]);
-            console.log(m.FS.readdir("/"));
-            results = m.FS.readFile("/main.schema.json", e);
+            m.main([languages[$currentEditorLanguage][0], "/main.fbs"]);
+            $totalFiles = m.FS.readdir("/").filter((a) => {
+                return !~[
+                    ".",
+                    "..",
+                    "tmp",
+                    "home",
+                    "dev",
+                    "proc",
+                    "main.fbs",
+                ].indexOf(a);
+            });
+            console.log($totalFiles);
+            //results = m.FS.readFile("/main.schema.json", e);
+            $currentEditorFile = $totalFiles[0];
         });
     };
+    let currentEditorFileContents = "";
+    $: {
+        if ($currentEditorFile && mFS) {
+            console.log($currentEditorFile, $totalFiles);
+            currentEditorFileContents = mFS.readFile(
+                "/" + $currentEditorFile,
+                en
+            );
+            console.log(currentEditorFileContents);
+        }
+    }
 
     export let currentStandard: PackageFile;
     export let params: any = {};
@@ -95,9 +131,14 @@
         } else {
             repoData = _repoData;
         }
-        console.log(repoData)
         getCode();
     });
+
+    $: {
+        if ($currentEditorLanguage) {
+            getCode();
+        }
+    }
 </script>
 
 <div class="w-full flex flex-col h-full">
@@ -115,7 +156,10 @@
                     <CodeMirror readOnly={true} content={repoData.IDL} />
                 </div>
             {:else if $subMenu === 2}
-                <CodeMirror readOnly={true} content={results} />
+                <CodeMirror
+                    readOnly={true}
+                    content={currentEditorFileContents}
+                />
             {/if}
         </div>
     </div>

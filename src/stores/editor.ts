@@ -1,6 +1,9 @@
 //@ts-ignore
 import { Writable, writable } from "svelte/store";
 
+export const currentEditorLanguage: Writable<number> = writable(0);
+export const currentEditorFile: Writable<string> = writable("");
+export const totalFiles: Writable<Array<string>> = writable([]);
 export let languages = [
     ["--cpp", "C++ header", "h", "include"],
     ["--java", "Java", "java", "java"],
