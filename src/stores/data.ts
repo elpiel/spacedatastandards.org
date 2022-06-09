@@ -2,6 +2,8 @@
 import { Writable, writable, get } from "svelte/store";
 import { Octokit } from "@octokit/rest";
 import { PackageFile, Repository } from "@/classes/package_file";
+import { languages, currentEditorFile, currentEditorLanguage, totalFiles } from "./editor";
+import flatc from "@/external/flatc.mjs";
 import localForage from "localforage";
 
 export let sTimeout = 1000 * 60 * 60 * 30;
@@ -25,3 +27,33 @@ export const getStandards = async (): Promise<void> => {
     }
     standards.set(data);
 }
+
+
+
+export let mFS: any;
+
+export const en = { encoding: "utf8" };
+
+export const getCode = async (repoData) => {
+
+    if (!repoData?.IDL) return;
+    flatc({
+        noInitialRun: true,
+    }).then((m) => {
+        mFS = m.FS;
+        m.FS.writeFile("/main.fbs", repoData.IDL);
+        m.main([languages[get(currentEditorLanguage)][0], "/main.fbs"]);
+        totalFiles.set(m.FS.readdir("/").filter((a) => {
+            return !~[
+                ".",
+                "..",
+                "tmp",
+                "home",
+                "dev",
+                "proc",
+                "main.fbs",
+            ].indexOf(a);
+        }));
+        currentEditorFile.set(get(totalFiles)[0]);
+    });
+};

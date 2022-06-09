@@ -7,7 +7,6 @@
     import {
         currentEditorFile,
         currentEditorLanguage,
-        languages,
         totalFiles,
     } from "@/stores/editor";
     import {
@@ -16,6 +15,9 @@
         ownerObject,
         standards,
         sTimeout,
+        mFS,
+        getCode,
+        en,
     } from "@/stores/data";
     import type { OctokitResponse } from "@octokit/types";
     import { onMount } from "svelte";
@@ -23,48 +25,17 @@
     import { push } from "svelte-spa-router";
     import CodeMirror from "../CodeMirror.svelte";
     //@ts-ignore
-    import flatc from "@/external/flatc.mjs";
-
-    let mFS: any;
-    let en = { encoding: "utf8" };
-    const getCode = async () => {
-        console.log(repoData.IDL);
-        console.log(languages[$currentEditorLanguage][0]);
-        if (!repoData?.IDL) return;
-        flatc({
-            noInitialRun: true,
-        }).then((m) => {
-            mFS = m.FS;
-
-            console.log(repoData.IDL);
-            console.log(languages[$currentEditorLanguage][0]);
-            m.FS.writeFile("/main.fbs", repoData.IDL);
-            m.main([languages[$currentEditorLanguage][0], "/main.fbs"]);
-            $totalFiles = m.FS.readdir("/").filter((a) => {
-                return !~[
-                    ".",
-                    "..",
-                    "tmp",
-                    "home",
-                    "dev",
-                    "proc",
-                    "main.fbs",
-                ].indexOf(a);
-            });
-            console.log($totalFiles);
-            //results = m.FS.readFile("/main.schema.json", e);
-            $currentEditorFile = $totalFiles[0];
-        });
+    let repoData: RepoData = {
+        readMe: "",
+        IDL: "",
     };
     let currentEditorFileContents = "";
     $: {
         if ($currentEditorFile && mFS) {
-            console.log($currentEditorFile, $totalFiles);
             currentEditorFileContents = mFS.readFile(
                 "/" + $currentEditorFile,
                 en
             );
-            console.log(currentEditorFileContents);
         }
     }
 
@@ -93,11 +64,6 @@
         push("/Standards");
     }
     let timeStampKey = `${currentStandard}:timestamp`;
-
-    let repoData: RepoData = {
-        readMe: "",
-        IDL: "",
-    };
 
     onMount(async () => {
         if (!currentStandard) {
@@ -131,12 +97,12 @@
         } else {
             repoData = _repoData;
         }
-        getCode();
+        getCode(repoData);
     });
 
     $: {
-        if ($currentEditorLanguage) {
-            getCode();
+        if (~$currentEditorLanguage) {
+            getCode(repoData);
         }
     }
 </script>

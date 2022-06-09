@@ -34,7 +34,9 @@
     "@octokit/webhooks": "^9.24.0",
     "codemirror": "^5.65.5",
     "codemirror-grammar-mode": "^0.1.10",
+    "file-saver": "^2.0.5",
     "isomorphic-fetch": "^3.0.0",
+    "jszip": "^3.10.0",
     "localforage": "^1.10.0",
     "svelte-awesome": "^3.0.0",
     "svelte-spa-router": "^3.2.0"
