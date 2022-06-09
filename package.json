@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp -R standards docs/standards",
+    "build": "vite build && cp -R standards docs/standards && cp CNAME ./docs/CNAME",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "deploy": "npm run build && git add -A && git commit -m 'deploy' && git push"
