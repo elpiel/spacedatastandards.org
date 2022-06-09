@@ -21,7 +21,7 @@
     <div class="overflow-y-auto relative">
         {#each $standards as standard, s}
             <div
-                class="text-xl cursor-pointer p-3 border 2 bg-slate-400"
+                class="text-xl cursor-pointer p-3 2 bg-slate-400"
                 on:click={(e) => {
                     push("/Standard/" + standard.name);
                 }}
