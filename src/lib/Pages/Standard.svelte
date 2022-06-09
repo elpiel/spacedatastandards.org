@@ -3,11 +3,21 @@
     import SubBar from "@/lib/SubTopBar.svelte";
     import type { PackageFile } from "@/classes/package_file";
     import { subMenu } from "@/stores/routes";
-    import { octokit, ownerObject } from "@/stores/data";
+    import { octokit, ownerObject, standards } from "@/stores/data";
     import { onMount } from "svelte";
     import localForage from "localforage";
+    import { push } from "svelte-spa-router";
 
     export let currentStandard: PackageFile;
+    export let params: any = {};
+    if (params.name) {
+        currentStandard = $standards.find((s) => {
+            console.log(s);
+            return s.name === params.name;
+        });
+    } else {
+        push("/Standards");
+    }
     let repoData: any = {
         readMe: "",
         IDL: "",
@@ -36,7 +46,7 @@
 <div class="w-full flex flex-col h-full">
     <div class="flex flex-col h-full">
         <div class="h-16 border bg-gray-100 text-gray-500 text-xl">
-            <TopBar {currentStandard} />
+            <TopBar title={currentStandard?.name} />
         </div>
         <div><SubBar /></div>
         <div class="bg-gray-200 h-full p-6 text-gray-700 overflow-y-auto">

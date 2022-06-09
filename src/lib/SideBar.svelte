@@ -3,7 +3,7 @@
 </script>
 
 <div
-    class="bg-slate-600 h-full text-white p-2 flex flex-col items-start justify-center"
+    class="bg-slate-600 h-full text-white flex flex-col items-start justify-center"
 >
     <Links />
 </div>

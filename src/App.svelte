@@ -19,11 +19,11 @@
   onMount(async () => {});
 </script>
 
-<main class="flex h-screen">
+<main class="relative w-screen flex h-screen">
   <div class="w-48">
     <SideBar />
   </div>
-  <div class="relative w-full">
+  <div class="relative flex w-full h-full overflow-hidden">
     <Router {routes} />
   </div>
 </main>
