@@ -4,12 +4,28 @@
     import type { PackageFile } from "@/classes/package_file";
     import { subMenu } from "@/stores/routes";
     import { octokit, ownerObject, standards, sTimeout } from "@/stores/data";
+    import type { OctokitResponse } from "@octokit/types";
     import { onMount } from "svelte";
     import localForage from "localforage";
     import { push } from "svelte-spa-router";
 
     export let currentStandard: PackageFile;
     export let params: any = {};
+
+    const getFile = async (filePath: string): Promise<string> => {
+        return atob(
+            (
+                (await octokit.rest.repos.getContent({
+                    ...ownerObject,
+                    path: filePath,
+                    mediaType: {
+                        format: "string",
+                    },
+                })) as OctokitResponse<any>
+            ).data.content
+        );
+    };
+
     if (params.name) {
         currentStandard = $standards.find((s) => {
             return s.name === params.name;
@@ -25,22 +41,17 @@
     onMount(async () => {
         let _repoData: any = await localForage.getItem(currentStandard.name);
         let last: any = await localForage.getItem(timeStampKey);
-
         if (
             !_repoData?.readMe?.length ||
+            !_repoData?.IDL?.length ||
             !last ||
             Date.now() > sTimeout + last
         ) {
-            repoData.readMe = atob(
-                (
-                    await octokit.rest.repos.getContent({
-                        ...ownerObject,
-                        path: `/standards/${currentStandard.name}/README.md`,
-                        mediaType: {
-                            format: "string",
-                        },
-                    })
-                ).data.content
+            repoData.readMe = await getFile(
+                `/standards/${currentStandard.name}/README.md`
+            );
+            repoData.IDL = await getFile(
+                `/standards/${currentStandard.name}/main.fbs`
             );
             localForage.setItem(currentStandard.name, repoData);
         } else {
