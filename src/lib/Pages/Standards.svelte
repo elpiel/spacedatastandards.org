@@ -16,7 +16,7 @@
             title={`<div class="w-full flex items-center justify-between">
             <div>Space Data Standard Directory</div> 
             <div class="text-sm h-full "> Last Refresh: ${new Date(
-                last
+                $last
             ).toISOString()}</div></div>`}
         />
     </div>
