@@ -3,7 +3,7 @@
 
 <h2> Description </h2>
 
-The RSM describes metadata about space objects independent of positional data. The message fields are derived from the Satellite Catalog (SATCAT/SATC) message currently produced by the Space Defense Operations Center (SPADOC) system and used as the basis of satellite catalog databases within the United States Government.  Legacy format description can be found [here](../../survey/legacy-messages/satcat/README.md).
+The RSM describes metadata about space objects independent of positional data. The message fields are derived from the Satellite Catalog (SATCAT/SATC) message currently produced by the Space Defense Operations Center (SPADOC) system and used as the basis of satellite catalog databases within the United States Government.  Legacy format description can be found <a href="https://github.com/DigitalArsenal/spacedatastandards.org/tree/master/survey/legacy-messages/satcat#readme">here</a>.
 
 <h2> Format </h2>
 <table>
