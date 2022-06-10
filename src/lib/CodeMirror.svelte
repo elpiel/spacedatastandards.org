@@ -25,12 +25,13 @@
       codeMirrorInstance.setValue(content);
     }
   }
-  
+
   onMount(() => {
     codeMirrorInstance = CodeMirror(document.getElementById(id), {
       value: "",
       mode: "flatbuffers",
       lineNumbers: true,
+      lineWrapping: true,
       readOnly,
     });
     codeMirrorInstance.setSize("100%", "100%");
