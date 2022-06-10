@@ -4,7 +4,7 @@
 
 <div class="flex flex-col">
     <div>
-        <TopBar title={"SpaceDataStandards.org"} />
+        <TopBar title={`<div class="flex justify-center items-center w-full pr-2 pl-2">SpaceDataStandards.org</div>`} />
     </div>
     <div class="flex flex-col overflow-y-auto relative">
         <h2>Background</h2>

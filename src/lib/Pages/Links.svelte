@@ -1,14 +1,20 @@
 <script lang="ts">
+    import { location } from "svelte-spa-router";
+    $: {
+        console.log($location);
+    }
 </script>
 
 <div class="flex flex-col gap-2 font-light w-full">
-    <a class="p-2 hover:bg-gray-500 w-full" href="#/">Home</a>
-    <a href="#/Standards">Standards</a>
+    <a class:underline={$location === "/"} href="#/">HOME</a>
+    <a class:underline={$location === "/Standards"} href="#/Standards"
+        >STANDARDS</a
+    >
 </div>
 
 <style lang="postcss">
     a {
-        @apply p-2  w-full;
+        @apply p-2  w-full underline-offset-2;
     }
     a:hover {
         @apply bg-gray-500;
