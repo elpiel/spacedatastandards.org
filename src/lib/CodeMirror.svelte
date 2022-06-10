@@ -26,14 +26,6 @@
     }
   }
   
-  $: {
-    if ($currentEditorLanguage) {
-      let mode = languages[$currentEditorLanguage][4].split("/")[1];
-
-      codeMirrorInstance.setOption("mode", "cpp");
-    }
-  }
-
   onMount(() => {
     codeMirrorInstance = CodeMirror(document.getElementById(id), {
       value: "",

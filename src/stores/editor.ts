@@ -12,7 +12,7 @@ export let languages = [
     ["--go", "Go", "go", "go"],
     ["--python", "Python", "py", "python", "text/x-script.python"],
     ["--js", "JavaScript", "js", "js", "text/javascript"],
-    ["--js", "JSON Schema", "json", "json"],
+    ["--jsonschema", "JSON Schema", "json", "json"],
     ["--ts", "TypeScript", "ts", "js", "text/javascript"],
     ["--php", " PHP", "php", "php"],
     /*["--grpc", " RPC stub code for GRPC", ''],*/
