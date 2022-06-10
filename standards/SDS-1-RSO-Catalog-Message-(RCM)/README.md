@@ -1,90 +1,30 @@
-<h2>Space Data Standard - 1 - Resident Space Object Catalog Message (RSM)</h2>
+## Space Data Standard - 1 - Resident Space Object Catalog Message (RSM)
 
 
-<h2> Description </h2>
+## Description
 
-The RSM describes metadata about space objects independent of positional data. The message fields are derived from the Satellite Catalog (SATCAT/SATC) message currently produced by the Space Defense Operations Center (SPADOC) system and used as the basis of satellite catalog databases within the United States Government.  Legacy format description can be found <a href="https://github.com/DigitalArsenal/spacedatastandards.org/tree/master/survey/legacy-messages/satcat#readme">here</a>.
+The RSM describes metadata about space objects independent of positional data. The message fields are derived from the Satellite Catalog (SATCAT/SATC) message currently produced by the Space Defense Operations Center (SPADOC) system and used as the basis of satellite catalog databases within the United States Government.  Legacy format description can be found [here](../../survey/legacy-messages/satcat/README.md).
 
-<h2> Format </h2>
-<table>
-<thead>
-<tr>
-<th>Predicate</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OBJECT_NAME</td>
-<td>Satellite Name(s)</td>
-</tr>
-<tr>
-<td>OBJECT_ID</td>
-<td>International Designator (YYYY-NNNAAA)</td>
-</tr>
-<tr>
-<td>NORAD_CAT_ID</td>
-<td>NORAD Catalog Number</td>
-</tr>
-<tr>
-<td>MULTIPLE_NAMES</td>
-<td>Multiple Name Flag</td>
-</tr>
-<tr>
-<td>OBJECT_TYPE</td>
-<td>Object type (Payload, Rocket body, Debris, Unknown)</td>
-</tr>
-<tr>
-<td>OPS_STATUS_CODE</td>
-<td>Operational Status Code</td>
-</tr>
-<tr>
-<td>OWNER</td>
-<td>Ownership, typically country or company</td>
-</tr>
-<tr>
-<td>LAUNCH_DATE</td>
-<td>Launch Date [year-month-day] (ISO 8601)</td>
-</tr>
-<tr>
-<td>LAUNCH_SITE</td>
-<td>Launch Site</td>
-</tr>
-<tr>
-<td>DECAY_DATE</td>
-<td>Decay Date, if applicable [year-month-day] (ISO 8601)</td>
-</tr>
-<tr>
-<td>PERIOD</td>
-<td>Orbital period [minutes]</td>
-</tr>
-<tr>
-<td>INCLINATION</td>
-<td>Inclination [degrees]</td>
-</tr>
-<tr>
-<td>APOGEE</td>
-<td>Apogee Altitude [kilometers]</td>
-</tr>
-<tr>
-<td>PERIGEE</td>
-<td>Perigee Altitude [kilometers]</td>
-</tr>
-<tr>
-<td>RCS</td>
-<td>Radar Cross Section [meters2]; blank if no data available</td>
-</tr>
-<tr>
-<td>DATA_STATUS_CODE</td>
-<td>Data status code; blank otherwise</td>
-</tr>
-<tr>
-<td>ORBIT_CENTER</td>
-<td>Orbit center</td>
-</tr>
-<tr>
-<td>ORBIT_TYPE</td>
-<td>Orbit type (Orbit, Landing, Impact, Docked to RSO, roundtrip)</td>
-</tr>
-</tbody>
-</table>
+## Format
+
+|Predicate |Description |
+---|---|
+OBJECT_NAME|Satellite Name(s)|
+OBJECT_ID|International Designator (YYYY-NNNAAA)|
+NORAD_CAT_ID|NORAD Catalog Number|
+MULTIPLE_NAMES|Multiple Name Flag|
+OBJECT_TYPE|Object type (Payload, Rocket body, Debris, Unknown)|
+OPS_STATUS_CODE|Operational Status Code|
+OWNER|Ownership, typically country or company|
+LAUNCH_DATE|Launch Date [year-month-day] (ISO 8601)|
+LAUNCH_SITE|Launch Site|
+DECAY_DATE|Decay Date, if applicable [year-month-day] (ISO 8601)|
+PERIOD|Orbital period [minutes]|
+INCLINATION|Inclination [degrees]|
+APOGEE|Apogee Altitude [kilometers]|
+PERIGEE|Perigee Altitude [kilometers]|
+RCS|Radar Cross Section [meters2]; blank if no data available|
+DATA_STATUS_CODE|Data status code; blank otherwise|
+ORBIT_CENTER|Orbit center|
+ORBIT_TYPE|	Orbit type (Orbit, Landing, Impact, Docked to RSO, roundtrip)
+

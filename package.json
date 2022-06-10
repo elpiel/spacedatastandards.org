@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp -R standards docs/standards && cp CNAME ./docs/CNAME",
+    "build": "vite build && cp -R standards docs/standards && cp CNAME ./docs/CNAME && node ./scripts/convertMarkDown.mjs",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "deploy": "npm run build && git add -A && git commit -m 'deploy' && git push"
@@ -16,9 +16,11 @@
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
     "@tsconfig/svelte": "^2.0.1",
     "autoprefixer": "^10.4.7",
+    "globby": "^13.1.1",
     "node-sass": "^7.0.1",
     "postcss": "^8.4.14",
     "rollup-plugin-commonjs": "^10.1.0",
+    "showdown": "^2.1.0",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.7",
     "svelte-preprocess": "^4.9.8",
