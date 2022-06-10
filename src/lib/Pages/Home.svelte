@@ -4,9 +4,11 @@
 
 <div class="flex flex-col">
     <div>
-        <TopBar title={`<div class="text-gray-600 flex justify-center items-center w-full pr-2 pl-2">SpaceDataStandards.org</div>`} />
+        <TopBar
+            title={`<div class="text-gray-600 flex justify-center items-center w-full pr-2 pl-2">SpaceDataStandards.org</div>`}
+        />
     </div>
-    <div class="flex flex-col overflow-y-auto relative text-gray-800 p-2">
+    <div class="flex flex-col overflow-y-auto relative text-gray-800 p-3">
         <h2>Background</h2>
         <p>
             The
@@ -106,8 +108,8 @@
             in applications.
         </p>
         <p>
-            For more information contact me at
-            <a href="mailto:tj@digitalarsenal.io">tj@digitalarsenal.io</a>
+            For more information contact us at
+            <a href="mailto:spacedatastandards@digitalarsenal.io">spacedatastandards@digitalarsenal.io</a>
             , or
             <a
                 href="https://github.com/DigitalArsenal/spacedatastandards.org/issues"
@@ -121,7 +123,9 @@
 
 <style lang="postcss">
     @tailwind base;
-
+a{
+    @apply text-blue-700;
+}
     h1,
     h2 {
         @apply p-2 text-2xl  border-b-2;
