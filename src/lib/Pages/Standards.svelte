@@ -5,6 +5,9 @@
     import TopBar from "../TopBar.svelte";
     import { Icon } from "svelte-awesome";
     import { file } from "svelte-awesome/icons";
+
+    let searchTerm: string = "";
+
     onMount(async () => {
         await getStandards();
     });
@@ -21,10 +24,16 @@
         />
     </div>
     <div>
-        <input class="rounded p-2 border m-2 w-1/3" placeholder="Search" />
+        <input type="search"
+            class="rounded p-2 border m-2 w-1/3"
+            placeholder="Search"
+            bind:value={searchTerm}
+        />
     </div>
     <div class="p-2 overflow-y-auto relative">
-        {#each $standards as standard, s}
+        {#each $standards.filter((s) => !searchTerm || ~s.name
+                    .toLowerCase()
+                    .indexOf(searchTerm.toLowerCase())) as standard, s}
             <div
                 class="flex gap-2 items-center justify-start text-xl cursor-pointer p-3 2 bg-slate-600 hover:bg-slate-500 text-gray-300"
                 on:click={(e) => {
