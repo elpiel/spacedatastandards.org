@@ -1,7 +1,7 @@
 <script lang="ts">
     import { subMenu } from "@/stores/routes";
     import { Icon } from "svelte-awesome";
-    import { download, language } from "svelte-awesome/icons";
+    import { download } from "svelte-awesome/icons";
     import { mFS, en } from "@/stores/data";
     import JSZip from "jszip";
     import { saveAs } from "file-saver";

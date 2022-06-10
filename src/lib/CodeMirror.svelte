@@ -3,6 +3,15 @@
   import CodeMirror from "codemirror";
   //import "codemirror/mode/javascript/javascript";
   import addFlatbufferMode from "@/external/google-modes/flatbuffers.js";
+  import javascript from "codemirror/mode/javascript/javascript.js";
+  import cpp from "codemirror/mode/clike/clike";
+
+  import {
+    languages,
+    currentEditorLanguage,
+    currentEditorFile,
+    totalFiles,
+  } from "@/stores/editor";
   import { onDestroy, onMount } from "svelte";
   let codeMirrorInstance;
   export let readOnly = false;
@@ -14,6 +23,14 @@
   $: {
     if (content && codeMirrorInstance) {
       codeMirrorInstance.setValue(content);
+    }
+  }
+  
+  $: {
+    if ($currentEditorLanguage) {
+      let mode = languages[$currentEditorLanguage][4].split("/")[1];
+
+      codeMirrorInstance.setOption("mode", "cpp");
     }
   }
 

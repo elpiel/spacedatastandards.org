@@ -180,4 +180,8 @@
     .readMeWrapper > :global(table > tbody > tr:nth-child(odd)) {
         @apply pb-2 pt-3 pl-2 border bg-gray-100;
     }
+
+    .readMeWrapper > :global(a) {
+        @apply text-blue-700;
+    }
 </style>
